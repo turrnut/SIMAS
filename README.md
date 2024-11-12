@@ -1,14 +1,14 @@
 
 # The SIMAS Programming Language
-*Created by: Turrnut*
-**Current Version v0.0.1**
+*Created by: Turrnut*<br>
+**Current Version v0.0.1**<br>
 **SIMAS**, which is an acronym for **SIM**ple **AS**sembly, is a dynamically typed, Just-In-Time
 (JIT) compiled, high level, procedural programming language with a syntax that is inspired
 by the Assembly programming language. In SIMAS, each line starts with an instruction,
-optionally followed by one or more operands, just like Assembly.
+optionally followed by one or more operands, just like Assembly.<br>
 
 SIMAS is designed to be minimal. The run function contains all of the code you need to run
-a SIMAS program. the parameter, inputText, is your SIMAS code.
+a SIMAS program. the parameter, inputText, is your SIMAS code.<br>
 
 The instruction and its operands are separated by one space character and one space character
 only, if anything other that is entered, unexcepted behavior will take place. Also, lines of
