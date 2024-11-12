@@ -29,7 +29,7 @@ code are separated by semicolons, as new lines are ignored.
 #### OPERAND 2: the first addend, optionally being a variable name
 #### OPERAND 3: the second addend, optionally being a variable name
 
-####- comment
+#### - comment
 #### until a semicolon is seen, the rest of the line is ignored.
 
 #### - copy
