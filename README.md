@@ -1,6 +1,6 @@
 
 # The SIMAS Programming Language
-*Created by: Turrnut*<br>
+*Created by: Turrnut, forked and ported by Tuvalutorture*<br>
 **Current Version v0.0.1**<br>
 **SIMAS**, which is an acronym for **SIM**ple **AS**sembly, is a dynamically typed, Just-In-Time
 (JIT) compiled, high level, procedural programming language with a syntax that is inspired
@@ -12,7 +12,13 @@ a SIMAS program. the parameter, inputText, is your SIMAS code.<br>
 
 The instruction and its operands are separated by one space character and one space character
 only, if anything other that is entered, unexcepted behavior will take place. Also, lines of
-code are separated by semicolons, as new lines are ignored.
+code are separated by semicolons, as new lines are ignored. 
+
+To run a SIMAS program, load it by typing "load("")" with the blank 
+quotes being your file path. Then it should work.
+
+This also patches a bug where everything, including numbers, are treated as strings. 
+This fixes that and allows for integers and floating point numbers to be inputter for basic operations.
 
 ## DOCUMENTATION 
 ### DATA TYPES 
