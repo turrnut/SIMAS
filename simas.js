@@ -62,7 +62,7 @@ function run(inputText){
           boxes[op1] += Number(op2);
         // if both addends are variable names
         } else if ((isNaN(Number(op1))) && (isNaN(Number(op2)))) {
-          boxes[op1] += boxes[op2];
+          boxes[op1] += Number(boxes[op2]);
         }
       }
     }
@@ -71,10 +71,36 @@ function run(inputText){
     function ins_comment() {
       return;
     }
-    
+
+    // instruction DIV
+    function ins_div(dataType, op1, op2) {
+      if (dataType == "num") {
+        // if first NUMBER is a variable name but second number is a number
+        if (isNaN(Number(op1)) && !isNaN(Number(op2))) {
+          boxes[op1] /= Number(op2);
+        // if both numbers are variable names
+        } else if ((isNaN(Number(op1))) && (isNaN(Number(op2)))) {
+          boxes[op1] /= Number(boxes[op2]);
+        }
+      }
+    }
+        
+    // instruction MUL
+    function ins_mul(dataType, op1, op2) {
+      if (dataType == "num") {
+        // if first number is a variable name but second number is a number
+        if (isNaN(Number(op1)) && !isNaN(Number(op2))) {
+          boxes[op1] *= Number(op2);
+        // if both numbers are variable names
+        } else if ((isNaN(Number(op1))) && (isNaN(Number(op2)))) {
+          boxes[op1] *= Number(boxes[op2]);
+        }
+      }
+    }
+        
     // instruction PRINT
     function ins_print(boxIdx) {
-      process.stdout.write(boxes[boxIdx]);
+      process.stdout.write(String(boxes[boxIdx]));
     }
     
     // instruction PRINTLN
@@ -126,7 +152,7 @@ function run(inputText){
           boxes[op1] -= Number(op2);
         // if both numbers are variable names
         } else if ((isNaN(Number(op1))) && (isNaN(Number(op2)))) {
-          boxes[op1] -= boxes[op2];
+          boxes[op1] -= Number(boxes[op2]);
         }
       }
     }
@@ -145,8 +171,11 @@ function run(inputText){
       
       switch (fi) {
         case "add"    : ins_add(o1, o2, o3); break;
-        case "comment": ins_comment();       break;
+        // case "cmp"    : ins_cmp(o1, o2);     break;
+        case "cmt"    : ins_comment();       break;
         case "copy"   : ins_copy(o1, o2);    break;
+        case "div"    : ins_div(o1, o2, o3); break;
+        case "mul"    : ins_mul(o1, o2, o3); break;
         case "print"  : ins_print(o1);       break;
         case "printc" : ins_printc(o1);      break;
         case "println": ins_println();       break;
@@ -162,10 +191,10 @@ function run(inputText){
     compile();
     
     // iterate lines
-    for(var c = 0; c < instructions.length; c ++) {
+    for(var lnIdx = 0; lnIdx < instructions.length; lnIdx ++) {
       
       // the current line with instruction and operands
-      current_ln = instructions[c];
+      current_ln = instructions[lnIdx];
       
       // where is the first instruction in the line
       var firstInsIdx = 0;

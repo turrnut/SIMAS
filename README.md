@@ -29,13 +29,27 @@ code are separated by semicolons, as new lines are ignored.
 #### OPERAND 2: the first addend, optionally being a variable name
 #### OPERAND 3: the second addend, optionally being a variable name
 
-#### - comment
+#### - cmt
 #### until a semicolon is seen, the rest of the line is ignored.
 
 #### - copy
 #### copy a variable's value to another
 #### OPERAND 1: the name of the variable copying from
 #### OPERAND 2: the name of the variable copying to
+
+#### - div
+#### performs operation of OPERAND 2 divide OPERAND 3 (as of now can only handle num)
+#### the value will be assigned to OPERAND 2, if it is a variable name
+#### OPERAND 1: the data type of both OPERAND 2 and 3
+#### OPERAND 2: the dividend, optionally being a variable name
+#### OPERAND 3: the divisor, optionally being a variable name
+
+#### - mul
+#### performs operation of OPERAND 2 multiply OPERAND 3 (as of now can only handle num)
+#### the value will be assigned to OPERAND 2, if it is a variable name
+#### OPERAND 1: the data type of both OPERAND 2 and 3
+#### OPERAND 2: the first factor, optionally being a variable name
+#### OPERAND 3: the second factor, optionally being a variable name
 
 #### - print
 #### print something to the console.
@@ -63,6 +77,6 @@ code are separated by semicolons, as new lines are ignored.
 #### performs operation of OPERAND 2 minus OPERAND 3 (as of now can only handle num)
 #### the value will be assigned to OPERAND 2, if it is a variable name
 #### OPERAND 1: the data type of both OPERAND 2 and 3
-#### OPERAND 3: the subtrahend, optionally being a variable name
-#### OPERAND 2: the minuend, optionally being a variable name
+#### OPERAND 2: the subtrahend, optionally being a variable name
+#### OPERAND 3: the minuend, optionally being a variable name
 
