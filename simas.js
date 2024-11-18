@@ -84,7 +84,12 @@ function run(inputText){
         }
       }
     }
-        
+    
+    // instruction FUN
+    function ins_fun(funName, argCnt) {
+      
+    }
+
     // instruction MUL
     function ins_mul(dataType, op1, op2) {
       if (dataType == "num") {
@@ -175,6 +180,7 @@ function run(inputText){
         case "cmt"    : ins_comment();       break;
         case "copy"   : ins_copy(o1, o2);    break;
         case "div"    : ins_div(o1, o2, o3); break;
+        case "fun"    : ins_fun();           break;
         case "mul"    : ins_mul(o1, o2, o3); break;
         case "print"  : ins_print(o1);       break;
         case "printc" : ins_printc(o1);      break;

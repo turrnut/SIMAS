@@ -1,6 +1,6 @@
 
 # The SIMAS Programming Language
-*Created by: Turrnut, forked and ported by Tuvalutorture*<br>
+*Created by: Turrnut*<br>
 **Current Version v0.0.1**<br>
 **SIMAS**, which is an acronym for **SIM**ple **AS**sembly, is a dynamically typed, Just-In-Time
 (JIT) compiled, high level, procedural programming language with a syntax that is inspired
