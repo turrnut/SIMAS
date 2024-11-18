@@ -1,3 +1,8 @@
 start;
+<<<<<<< HEAD
 
 printc Hello, World!;
+=======
+printc Hello World!;
+println;
+>>>>>>> 0d14aa796039726407ca89b42e5a630d05cdb711
