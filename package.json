@@ -4,7 +4,8 @@
   "description": "The SIMAS programming language",
   "main": "program.js",
   "scripts": {
-    "pack": "pkg program.js"
+    "pack": "pkg program.js",
+    "packc": "pkg compiler.js"
   },
   "author": "Turrnut",
   "license": "ISC",

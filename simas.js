@@ -5,16 +5,26 @@
 
 const readline = require("readline-sync");
 
-function run(inputText){
-    var instructions = [];
-    var boxes = [];
-    var BOX_SIZE = 255;
-    var current_ln;
-    var lines = [];
+function run(inputText, isRun){
+    let instructions = [];
+    let boxes = [];
+    let BOX_SIZE = 255;
+    let current_ln;
+    let inFunction = false;
+    let execFunction = false;
+
+    // iterating index, starting at 0
+    let lnIdx;
+
+    let functions = [];
+    let lines = [];
+
+    // assigned in the dispatcher function
+    let firstInsIdx;
     
     // initialize the boxes, or the memory of the program
     function initBoxes() {
-      var boxI = 0;
+      let boxI = 0;
       while (boxI < BOX_SIZE) {
         boxes.push(0);
         boxI ++;
@@ -23,10 +33,10 @@ function run(inputText){
     
     // processes the text
     function filterText() {
-      var newText = "";
-      for (var currentCharIndex = 0; currentCharIndex < inputText.length; currentCharIndex++) {
-        var currentChar = inputText[currentCharIndex];
-        var lastChar = currentCharIndex == 0 ? "" : inputText[currentCharIndex-1];
+      let newText = "";
+      for (let currentCharIndex = 0; currentCharIndex < inputText.length; currentCharIndex++) {
+        let currentChar = inputText[currentCharIndex];
+        let lastChar = currentCharIndex == 0 ? "" : inputText[currentCharIndex-1];
         
         switch(currentChar) {
           case "" : continue;
@@ -41,15 +51,16 @@ function run(inputText){
     // compiling the raw text into executable sequences
     function compile() {
       lines = filterText();
-      for(var a = 0; a < lines.length; a ++) {
+      for(let a = 0; a < lines.length; a ++) {
         if (lines[a] == "") {
           lines.splice(a, 1);
         }
       }
       
-      for(var b = 0; b < lines.length; b ++) {
+      for(let b = 0; b < lines.length; b ++) {
         instructions.push(lines[b].split(" "));
       }
+      instructions = instructions.map(subArray => subArray.filter(item => item !== ''));
     }
     
     // ******** INSTRUCTION FUNCTIONS **********
@@ -67,7 +78,7 @@ function run(inputText){
       }
     }
     
-    // instruction COMMENT
+    // instruction CMT or COMMENT
     function ins_comment() {
       return;
     }
@@ -84,12 +95,22 @@ function run(inputText){
         }
       }
     }
+
+    // instruction END
+    function ins_end (endWhat) {
+      if (endWhat == "fun") {
+        inFunction = false;
+        execFunction = false;
+      }
+    }
     
     // instruction FUN
     function ins_fun(funName, argCnt) {
-      
+      functions[functions.length] = [funName, Number(argCnt), lnIdx];
+      inFunction = true;
+      execFunction = false;
     }
-
+    
     // instruction MUL
     function ins_mul(dataType, op1, op2) {
       if (dataType == "num") {
@@ -115,8 +136,8 @@ function run(inputText){
 
     // instruction PRINTC
     function ins_printc(a_thing) {
-      var the_thing = a_thing;
-      for(var i = firstInsIdx + 2; i < current_ln.length; i ++) {
+      let the_thing = a_thing;
+      for(let i = firstInsIdx + 2; i < current_ln.length; i ++) {
         the_thing += " " + current_ln[i];
       }
       process.stdout.write(the_thing);
@@ -136,8 +157,8 @@ function run(inputText){
           boxes[boxIdx] = newValue === "true" ? true : false;
           break;
         case "str":
-          var strValue = newValue;
-          for(var i = firstInsIdx + 4; i < current_ln.length; i ++) {
+          let strValue = newValue;
+          for(let i = firstInsIdx + 4; i < current_ln.length; i ++) {
             strValue += " " + current_ln[i];
           }
           boxes[boxIdx] = strValue;
@@ -167,20 +188,22 @@ function run(inputText){
     // instruction dispatcher SWITCH statement
     function dispatcher(firstInsIdx) {
       // First Instruction
-      var fi = current_ln[firstInsIdx];
+      let fi = current_ln[firstInsIdx];
       
       // first, second operand, etc...
-      var o1 = current_ln[firstInsIdx + 1];
-      var o2 = current_ln[firstInsIdx + 2];
-      var o3 = current_ln[firstInsIdx + 3];
+      let o1 = current_ln[firstInsIdx + 1];
+      let o2 = current_ln[firstInsIdx + 2];
+      let o3 = current_ln[firstInsIdx + 3];
       
       switch (fi) {
         case "add"    : ins_add(o1, o2, o3); break;
         // case "cmp"    : ins_cmp(o1, o2);     break;
+        case "comment": ins_comment();       break;
         case "cmt"    : ins_comment();       break;
         case "copy"   : ins_copy(o1, o2);    break;
         case "div"    : ins_div(o1, o2, o3); break;
-        case "fun"    : ins_fun();           break;
+        case "end"    : ins_end(o1);         break;
+        case "fun"    : ins_fun(o1, o2);     break;
         case "mul"    : ins_mul(o1, o2, o3); break;
         case "print"  : ins_print(o1);       break;
         case "printc" : ins_printc(o1);      break;
@@ -193,21 +216,31 @@ function run(inputText){
         default: return;
       }
     }
-    
-    compile();
-    
+
+    // purely compiling
+    if(!isRun) {
+      compile();
+      return instructions;
+    }
+    // executing
+    else {
+      instructions = inputText;
+    }
+
     // iterate lines
-    for(var lnIdx = 0; lnIdx < instructions.length; lnIdx ++) {
-      
+    for(lnIdx = 0; lnIdx < instructions.length; lnIdx ++) {
+
       // the current line with instruction and operands
       current_ln = instructions[lnIdx];
       
       // where is the first instruction in the line
-      var firstInsIdx = 0;
+      firstInsIdx = 0;
       
       while (current_ln[firstInsIdx] == "") {
         firstInsIdx ++;
       }
+      
+      if ((inFunction) && (!execFunction)) continue;
       
       dispatcher(firstInsIdx);
       

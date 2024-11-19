@@ -1,3 +1,9 @@
 start;
 printc Hello World!;
 println;
+
+fun repeat 3;
+
+
+
+end  fun;
