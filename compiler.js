@@ -11,7 +11,7 @@ if(!process.argv[2]) {
 }
 
 if (process.argv[2] == "-i") {
-    process.stdout.write("SIMAS Programming Language Compiler v0.0.1\nCopyright (c) 2024 Turrnut\n");
+    process.stdout.write(common.compiler_information);
 } else {
     var ins = "";
     fs.readFile(process.argv[2], 'utf8', function (err, data) {

@@ -1,7 +1,5 @@
 // todo:
 // convert: convert data type
-// print should not have new line
-// input should be console input
 
 const readline = require("readline-sync");
 
@@ -18,6 +16,7 @@ function run(inputText, isRun){
 
     let functions = [];
     let lines = [];
+    let returnTo = 0;
 
     // assigned in the dispatcher function
     let firstInsIdx;
@@ -75,6 +74,21 @@ function run(inputText, isRun){
         } else if ((isNaN(Number(op1))) && (isNaN(Number(op2)))) {
           boxes[op1] += Number(boxes[op2]);
         }
+      }
+    }
+
+    // instruction CALL
+    function ins_call(funName) {
+      for(let funIdx = 0; funIdx < functions.length; funIdx ++) {
+        if (functions[funIdx][0] != funName) {
+          continue;
+        }
+
+        let callFunction = functions[funIdx];
+        returnTo = lnIdx + 1;
+        lnIdx = callFunction[2];
+        inFunction = true;
+        execFunction = true;
       }
     }
     
@@ -148,6 +162,14 @@ function run(inputText, isRun){
       boxes[to] = boxes[from];
     }
     
+    // instruction RET
+    function ins_ret() {
+      inFunction = false;
+      execFunction = false;
+      lnIdx = returnTo;
+      // returnTo = 0;
+    }
+
     // instruction SET
     function ins_set(dataType, boxIdx, newValue) {
       switch(dataType) {
@@ -197,6 +219,7 @@ function run(inputText, isRun){
       
       switch (fi) {
         case "add"    : ins_add(o1, o2, o3); break;
+        case "call"   : ins_call(o1);        break;
         // case "cmp"    : ins_cmp(o1, o2);     break;
         case "comment": ins_comment();       break;
         case "cmt"    : ins_comment();       break;
@@ -208,6 +231,7 @@ function run(inputText, isRun){
         case "print"  : ins_print(o1);       break;
         case "printc" : ins_printc(o1);      break;
         case "println": ins_println();       break;
+        case "ret"    : ins_ret();           break;
         case "set"    : ins_set(o1, o2, o3); break;
         case "start"  : ins_start();         break;
         case "sub"    : ins_sub(o1, o2, o3); break;
@@ -240,7 +264,7 @@ function run(inputText, isRun){
         firstInsIdx ++;
       }
       
-      if ((inFunction) && (!execFunction)) continue;
+      if ((inFunction) && (!execFunction) && (current_ln[firstInsIdx] != "end")) continue;
       
       dispatcher(firstInsIdx);
       

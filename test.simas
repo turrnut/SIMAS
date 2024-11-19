@@ -1,9 +1,12 @@
 start;
-printc Hello World!;
-println;
 
-fun repeat 3;
+fun repeat 0;
 
+    printc Hello World!;
+    println;
 
+    ret;
+end fun;
 
-end  fun;
+call repeat;
+
