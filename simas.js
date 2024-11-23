@@ -85,7 +85,7 @@ function run(inputText, isRun){
         }
 
         let callFunction = functions[funIdx];
-        returnTo = lnIdx + 1;
+        returnTo = lnIdx;
         lnIdx = callFunction[2];
         inFunction = true;
         execFunction = true;
