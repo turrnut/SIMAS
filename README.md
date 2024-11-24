@@ -8,14 +8,11 @@ high level, procedural programming language with a syntax that is inspired
 by the Assembly programming language. In SIMAS, each line starts with an instruction,
 optionally followed by one or more operands, just like Assembly.<br>
 
-SIMAS is designed to be minimal. The run function contains all of the code you need to run
-a SIMAS program. the parameter, inputText, is your SIMAS code.<br>
+The instruction and its operands are separated a space character. Also, lines of code are separated by semicolons, as new lines are ignored. <br>
 
-The instruction and its operands are separated a space character. Also, lines of code are separated
-by semicolons, as new lines are ignored. 
+SIMAS is designed to be minimal. The `run` function in `simas.js` contains all of the code you need to run a SIMAS program. the parameter, isRun, is whether you are compiling or running the code, and inputText, is your SIMAS code.<br>
 
-To run a SIMAS program, compile it first using the `simasc` compiler, it should generate a `.csa` file,
-then run the `.csa` file with `simas`
+To run a SIMAS program, compile it first using the `simasc` compiler, it should generate a `.csa` bytecode file, which stands for Compiled Simple Assembly. Then, run the `.csa` file with `simas`
 
 **Troubleshooting**
 If you're on a UNIX system(MacOS, Linux) and can't run the `simasc`, try running `chmod +x ./simasc`,
