@@ -1,5 +1,5 @@
 
-![SIMAS LOGO](/simas.png)
+![SIMAS BANNER](/simasbanner.png)
 # The SIMAS Programming Language
 *Created by: Turrnut*<br>
 **Current Version v0.0.2**<br>
