@@ -11,3 +11,6 @@ end fun;
 call repeat;
 call repeat;
 call repeat;
+
+printc Hello!;
+

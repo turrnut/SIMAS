@@ -10,6 +10,6 @@ if (process.argv[2] == "-i") {
             process.stderr.write("Error opening file: " + err.path + "\n");
             process.exit(1);
         }
-        simas.run(JSON.parse(common.xString(data)), true);
+        simas.run(JSON.parse(common.xString(data)), true, process.argv[2]);
     });
 }

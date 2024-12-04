@@ -2,8 +2,13 @@
 // convert: convert data type
 
 const readline = require("readline-sync");
+const { setErrorInfo } = require("./error");
+const error = require("./error");
 
-function run(inputText, isRun){
+// Input text: Code text
+// isRun     : compile if false, run if true
+// fileName  : name of the file
+function run(inputText, isRun, fileName){
     let instructions = [];
     let boxes = [];
     let BOX_SIZE = 255;
@@ -217,12 +222,13 @@ function run(inputText, isRun){
       let o2 = current_ln[firstInsIdx + 2];
       let o3 = current_ln[firstInsIdx + 3];
       
-      switch (fi) {
+      // Check if comment
+      if (fi.startsWith("@")) return;
+
+      switch (fi.toLowerCase()) {
         case "add"    : ins_add(o1, o2, o3); break;
         case "call"   : ins_call(o1);        break;
-        // case "cmp"    : ins_cmp(o1, o2);     break;
-        case "comment": ins_comment();       break;
-        case "cmt"    : ins_comment();       break;
+        case "@"      : ins_comment();       break;
         case "copy"   : ins_copy(o1, o2);    break;
         case "div"    : ins_div(o1, o2, o3); break;
         case "end"    : ins_end(o1);         break;
@@ -236,8 +242,7 @@ function run(inputText, isRun){
         case "start"  : ins_start();         break;
         case "sub"    : ins_sub(o1, o2, o3); break;
         
-        case undefined: return;
-        default: return;
+        default: error.error("Unknown instruction: " + fi);
       }
     }
 
@@ -251,12 +256,17 @@ function run(inputText, isRun){
       instructions = inputText;
     }
 
+    error.setCurrentFile(fileName);
+
     // iterate lines
     for(lnIdx = 0; lnIdx < instructions.length; lnIdx ++) {
 
       // the current line with instruction and operands
       current_ln = instructions[lnIdx];
       
+      // make sure to know what line to report in case of error
+      error.setCurrentLine(current_ln);
+
       // where is the first instruction in the line
       firstInsIdx = 0;
       

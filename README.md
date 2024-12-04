@@ -1,5 +1,5 @@
 
-![SIMAS BANNER](/simasbanner.png)
+![SIMAS BANNER](/images/simasbanner.png)
 # The SIMAS Programming Language
 *Created by: Turrnut*<br>
 **Current Version v0.0.2**<br>
@@ -8,11 +8,10 @@ high level, procedural programming language with a syntax that is inspired
 by the Assembly programming language. In SIMAS, each line starts with an instruction,
 optionally followed by one or more operands, just like Assembly.<br>
 
-SIMAS is designed to be minimal. The run function contains all of the code you need to run
-a SIMAS program. the parameter, inputText, is your SIMAS code.<br>
-
 The instruction and its operands are separated a space character. Also, lines of code are separated
-by semicolons, as new lines are ignored. 
+by semicolons, as new lines are ignored. <br>
+
+SIMAS is case-sensitive, although instructions are not. <br>
 
 To run a SIMAS program, compile it first using the `simasc` compiler, it should generate a `.csa` file,
 then run the `.csa` file with `simas`
@@ -29,6 +28,9 @@ same thing applies to `simas`
 #### - num  : a number, can be an integer or a decimal
 #### - str  : a string of characters
 ## INSTRUCTIONS
+#### - @
+* until a semicolon is seen, the rest of the line is ignored. this is a comment feature
+
 #### - add
 * add the value of OPERAND 2 and 3 (as of now can only handle num) the value will be assigned to OPERAND 2, if it is a variable name
 * OPERAND 1: the data type of both OPERAND 2 and 3
@@ -38,14 +40,6 @@ same thing applies to `simas`
 #### - call
 * call the function
 * OPERAND 1: the name of the function
-
-#### - cmt
-* same as the `comment` instruction
-* until a semicolon is seen, the rest of the line is ignored.
-
-#### - comment
-* same as the `cmt` instruction
-* until a semicolon is seen, the rest of the line is ignored.
 
 #### - copy
 * copy a variable's value to another
