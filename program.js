@@ -2,7 +2,12 @@ let fs = require('fs');
 let simas = require('./simas');
 let common = require('./common');
 
-if (process.argv[2] == "-i") {
+if(!process.argv[2]) {
+    process.stderr.write("Error: Please provide an input file to run.\n");
+    process.exit(1);
+}
+
+if (process.argv[2] == "-h") {
     process.stdout.write(common.runtime_information);
 } else {
     fs.readFile(process.argv[2], 'utf8', function (err, data) {

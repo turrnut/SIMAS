@@ -10,7 +10,7 @@ if(!process.argv[2]) {
     process.exit(1);
 }
 
-if (process.argv[2] == "-i") {
+if (process.argv[2] == "-h") {
     process.stdout.write(common.compiler_information);
 } else {
     var ins = "";
