@@ -88,8 +88,13 @@ same thing applies to `simas`
 * OPERAND 3: the second value, optionally being a variable name
 
 #### - jump
-* jump to a label
+* jump to a label. this is an unconditional jump
 * OPERAND 1: name of the label
+
+#### - jumpv
+* jump to a label. this is a conditional jump
+* OPERAND 1: name of the label
+* OPERAND 2: name of a variable. if true, will jump to the label
 
 #### - label
 * define a label
