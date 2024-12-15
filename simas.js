@@ -1,8 +1,4 @@
-// todo:
-// convert: convert data type
-
 const readline = require("readline-sync");
-const { setErrorInfo } = require("./error");
 const error = require("./error");
 
 // Input text: Code text
@@ -104,6 +100,15 @@ function run(inputText, isRun, fileName){
     // instruction CMT or COMMENT
     function ins_comment() {
       return;
+    }
+
+    function ins_conv(varName, dType) {
+      switch(dType.toLowerCase()) {
+        default: error.error(`Cannot convert the variable ${varName} to data type "${dType}, which is a non-existent data type`);
+        case "bool": boxes[varName] = Boolean(boxes[varName]);
+        case "num": boxes[varName]  = Number(boxes[varName]);
+        case "str": boxes[varName]  = String(boxes[varName]);
+      }
     }
 
     // instruction DIV
@@ -406,6 +411,7 @@ function run(inputText, isRun, fileName){
         case "add"    : ins_add(o1, o2, o3); break;
         case "call"   : ins_call(o1);        break;
         case "@"      : ins_comment();       break;
+        case "conv"   : ins_conv(o1, o2);    break;
         case "copy"   : ins_copy(o1, o2);    break;
         case "div"    : ins_div(o1, o2, o3); break;
         case "end"    : ins_end(o1);         break;

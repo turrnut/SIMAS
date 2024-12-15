@@ -23,13 +23,11 @@ same thing applies to `simas`
 ## DOCUMENTATION 
 ### DATA TYPES 
 #### - bool : a boolean value.
-####        0 is false, all other numbers are true
-####        an empty string is false, all other strings are true
 #### - num  : a number, can be an integer or a decimal
 #### - str  : a string of characters
 ## INSTRUCTIONS
 #### - @
-* until a semicolon is seen, the rest of the line is ignored. this is a comment feature
+* all code after @ is ignored, until a semicolon is seen. this is a comment feature
 
 #### - add
 * add the value of OPERAND 2 and 3 (as of now can only handle num) the value will be assigned to OPERAND 2, if it is a variable name
@@ -40,6 +38,11 @@ same thing applies to `simas`
 #### - call
 * call the function
 * OPERAND 1: the name of the function
+
+#### - conv
+* Convert to a different data type
+* OPERAND 1: name of variable
+* OPERAND 2: target data type
 
 #### - copy
 * copy a variable's value to another
@@ -57,14 +60,14 @@ same thing applies to `simas`
 * OPERAND 1: as of now can only handle functions, so the only possible value is `fun`
 
 #### - eqc
-* equal to comparison operator
+* equal to comparison operator. value will be assigned to the variable at OPERAND 1, if it is a variable name
 * ATTENTION: please use this ONLY when OPERAND 2 is a variable name and OPERAND 3 is a constant
 * OPERAND 1: data type of OPERANDS 2 and 3
 * OPERAND 2: name of first variable
 * OPERAND 3: a constant
 
 #### - eqv
-* equal to comparison operator
+* equal to comparison operator. value will be assigned to the variable at OPERAND 1, if it is a variable name
 * ATTENTION: please use this ONLY whend dealing with two variables
 * OPERAND 1: data type of OPERANDS 2 and 3
 * OPERAND 2: name of first variable
@@ -76,13 +79,13 @@ same thing applies to `simas`
 * OPERAND 2: number of parameters the function would accept
 
 #### - gt
-* greater than comparison operator
+* greater than comparison operator. value will be assigned to the variable at OPERAND 1, if it is a variable name
 * OPERAND 1: the data type of both OPERAND 2 and 3
 * OPERAND 2: the first value, optionally being a variable name
 * OPERAND 3: the second value, optionally being a variable name
 
 #### - gte
-* greater than or equal to comparison operator
+* greater than or equal to comparison operator. value will be assigned to the variable at OPERAND 1, if it is a variable name
 * OPERAND 1: the data type of both OPERAND 2 and 3
 * OPERAND 2: the first value, optionally being a variable name
 * OPERAND 3: the second value, optionally being a variable name
@@ -108,14 +111,14 @@ same thing applies to `simas`
 * OPERAND 3: the second factor, optionally being a variable name
 
 #### - neqc
-* not equal to comparison operator
+* not equal to comparison operator. value will be assigned to the variable at OPERAND 1, if it is a variable name
 * ATTENTION: please use this ONLY when OPERAND 2 is a variable name and OPERAND 3 is a constant
 * OPERAND 1: data type of OPERANDS 2 and 3
 * OPERAND 2: name of first variable
 * OPERAND 3: a constant
 
 #### - neqv
-* not equal to comparison operator
+* not equal to comparison operator. value will be assigned to the variable at OPERAND 1, if it is a variable name
 * ATTENTION: please use this ONLY whend dealing with two variables
 * OPERAND 1: data type of OPERANDS 2 and 3
 * OPERAND 2: name of first variable
@@ -148,13 +151,13 @@ same thing applies to `simas`
 * OPERAND 3: the value you wish to assign
 
 #### - st
-* smaller than comparison operator
+* smaller than comparison operator. value will be assigned to the variable at OPERAND 1, if it is a variable name
 * OPERAND 1: the data type of both OPERAND 2 and 3
 * OPERAND 2: the first value, optionally being a variable name
 * OPERAND 3: the second value, optionally being a variable name
 
 #### - ste
-* smaller than or equal to comparison operator
+* smaller than or equal to comparison operator. value will be assigned to the variable at OPERAND 1, if it is a variable name
 * OPERAND 1: the data type of both OPERAND 2 and 3
 * OPERAND 2: the first value, optionally being a variable name
 * OPERAND 3: the second value, optionally being a variable name
