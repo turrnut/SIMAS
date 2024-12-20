@@ -16,13 +16,14 @@ SIMAS is case-sensitive, although instructions and data types are not. <br>
 To run a SIMAS program, compile it first using the `simasc` compiler, it should generate a `.csa` file,
 then run the `.csa` file with `simas`
 
-**Additional Notes**
-All occurences`\s` is replaced with `;`, and `\\` is replaced with `\`, in a SIMAS program<br>
+**Additional Notes** <br>
+To access arguments within a function, use `$` followed by a number. For example, `$0` is the first argument, `$1` is the second argument, and so on.<br>
+All occurences of `\s` is replaced with `;`, and `\\` is replaced with `\`, in a SIMAS program<br>
 If you want to be polite to SIMAS, you can add `PLEASE` (case-insensitive) and a space character
 in front of any instruction. However, SIMAS will ignore your politeness by ignoring `PLEASE`. <br>
-For example, `PLEASE PRINTC Hello!;` and `PRINTC Hello!;` does the same thing;
+For example, `PLEASE PRINTC Hello!;` and `PRINTC Hello!;` does the same thing
 
-**Troubleshooting**
+**Troubleshooting** <br>
 If you're on a UNIX system(MacOS, Linux) and can't run the `simasc`, try running `chmod +x ./simasc`,
 same thing applies to `simas`
 
