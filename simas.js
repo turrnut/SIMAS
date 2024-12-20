@@ -259,6 +259,12 @@ function run(inputText, isRun, fileName){
     
     // instruction LABEL
     function ins_label(label_name) {
+      for (let index = 0; index < labels.length; index++) {
+        const current_label = labels[index];
+        if (current_label[0] == label_name) {
+          error.error("Redefinition of the label \"" + label_name + "\".");
+        }
+      }
       labels.unshift([label_name, lnIdx]);
     }
     

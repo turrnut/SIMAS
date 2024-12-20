@@ -1,4 +1,4 @@
-* convert: convert data type
-* arguments, return value
-* logical operators
-* not operator
+* [X] convert: convert data type
+* [] arguments, return value
+* [] logical operators
+* [] not operator

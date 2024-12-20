@@ -146,7 +146,7 @@ same thing applies to `simas`
 
 #### - set
 * assign a value to a variable.
-* OPERAND 1: the type of value. If the operand here is "in", then the value of the user input will be stored at this variable	
+* OPERAND 1: the type of value. If the operand here is "in", then the value of the user input will be stored at this variable, with `str` type
 * OPERAND 2: the name of the variable
 * OPERAND 3: the value you wish to assign
 
