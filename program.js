@@ -15,6 +15,10 @@ if (process.argv[2] == "-h") {
             process.stderr.write("Error opening file: " + err.path + "\n");
             process.exit(1);
         }
+        try {
         simas.run(JSON.parse(common.xString(data)), true, process.argv[2]);
+        } catch(err) {
+            console.log("Something went wrong.");
+        }
     });
 }

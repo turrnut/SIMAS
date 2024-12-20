@@ -7,7 +7,6 @@ const error = require("./error");
 function run(inputText, isRun, fileName){
     let instructions = [];
     let boxes = [];
-    let BOX_SIZE = 255;
     let current_ln;
     let inFunction = false;
     let execFunction = false;
@@ -23,15 +22,6 @@ function run(inputText, isRun, fileName){
     // assigned in the dispatcher function
     let firstInsIdx;
     
-    // initialize the boxes, or the memory of the program
-    function initBoxes() {
-      let boxI = 0;
-      while (boxI < BOX_SIZE) {
-        boxes.push(0);
-        boxI ++;
-      }
-    }
-    
     // processes the text
     function filterText() {
       let newText = "";
@@ -46,7 +36,7 @@ function run(inputText, isRun, fileName){
         }
         newText += currentChar;
       }
-      return newText.split(";");
+      return newText.replace(/\\\\s/g, ';').replace(/\\\\/g, '\\').split(";");
     }
     
     // compiling the raw text into executable sequences
@@ -75,7 +65,7 @@ function run(inputText, isRun, fileName){
           boxes[op1] += Number(op2);
         // if both addends are variable names
         } else if ((isNaN(Number(op1))) && (isNaN(Number(op2)))) {
-          boxes[op1] += Number(boxes[op2]);
+          getVar(op1) += Number(getVar(op2));
         }
       }
     }
@@ -88,6 +78,33 @@ function run(inputText, isRun, fileName){
         }
 
         let callFunction = functions[funIdx];
+        // get args
+        let mode = "v";
+        let argList = []
+        for (let index = 0; index < (callFunction[1] * 2) + 1; index++) {
+          if (mode != "c" && mode != "v") {
+            error.error(`Incorrect mode \"${mode}\", can only be \"c\" or \"v\"`);
+          }
+
+          let currentThing = current_ln[firstInsIdx + 1 + index];
+          if (currentThing.toLowerCase() == "v" || currentThing.toLowerCase() == "c" || (firstInsIdx + 1 + index) % 2 == 0) {
+            mode = currentThing.toLowerCase();
+            continue;
+          }
+          
+          if (mode == "v") {
+            argList.push(boxes[currentThing]);
+          }
+          else if (mode == "c") {
+            argList.push(currentThing);
+          }
+        }
+        for (let index = 0; index < argList.length; index++) {
+          const argument = argList[index];
+          let argIdx = String(index-1);
+          boxes["$" + argIdx] = argument;
+        }
+
         returnTo = lnIdx;
         lnIdx = callFunction[2];
         inFunction = true;
@@ -104,10 +121,17 @@ function run(inputText, isRun, fileName){
 
     function ins_conv(varName, dType) {
       switch(dType.toLowerCase()) {
-        default: error.error(`Cannot convert the variable ${varName} to data type "${dType}, which is a non-existent data type`);
-        case "bool": boxes[varName] = Boolean(boxes[varName]);
-        case "num": boxes[varName]  = Number(boxes[varName]);
-        case "str": boxes[varName]  = String(boxes[varName]);
+        default: error.error(`Cannot convert the variable ${varName} to data type "${dType}, which is a non-existent data type.`);
+        case "bool":
+          boxes[varName] = Boolean(boxes[varName]); break;
+          case "num":
+            boxes[varName] = Number(boxes[varName]);
+            if (isNaN(boxes[varName])) {
+              error.error(`Cannot convert the variable ${varName} to data type "${dType}.`);
+            }
+          break;
+        case "str":
+          boxes[varName]  = String(boxes[varName]); break;
       }
     }
 
@@ -386,7 +410,7 @@ function run(inputText, isRun, fileName){
     function predispatcher(firstInsIdx) {
       // First Instruction
       let fi = current_ln[firstInsIdx];
-      
+
       // first, second operand, etc...
       let o1 = current_ln[firstInsIdx + 1];
       let o2 = current_ln[firstInsIdx + 2];
@@ -428,7 +452,7 @@ function run(inputText, isRun, fileName){
         case "gte"    : ins_gte(o1, o2, o3); break;
         case "jump"   : ins_jump(o1);        break;
         case "jumpv"  : ins_jumpv(o1, o2);   break;
-        case "label"  : ins_label(o1);       break;
+        case "label"  :                      break;
         case "mul"    : ins_mul(o1, o2, o3); break;
         case "neqc"   : ins_neqc(o1,o2,o3);  break;
         case "neqv"   : ins_neqv(o1,o2,o3);  break;
@@ -458,14 +482,13 @@ function run(inputText, isRun, fileName){
     }
 
     error.setCurrentFile(fileName);
-    initBoxes();
 
     // preiterate lines
     for(lnIdx = 0; lnIdx < instructions.length; lnIdx ++) {
       current_ln = instructions[lnIdx];
       error.setCurrentLine(current_ln);
       firstInsIdx = 0;
-      while (current_ln[firstInsIdx] == "") {
+      while (current_ln[firstInsIdx] == "" || current_ln[firstInsIdx].toLowerCase() == "please") {
         firstInsIdx ++;
       }
       if ((inFunction) && (!execFunction) && (current_ln[firstInsIdx].toLowerCase() != "end")) continue;
@@ -486,7 +509,7 @@ function run(inputText, isRun, fileName){
       // where is the first instruction in the line
       firstInsIdx = 0;
       
-      while (current_ln[firstInsIdx] == "") {
+      while (current_ln[firstInsIdx] == "" || current_ln[firstInsIdx].toLowerCase() == "please") {
         firstInsIdx ++;
       }
       
