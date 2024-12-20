@@ -1,0 +1,12 @@
+@ Testing arguments;
+FUN functionName 3;
+    PRINTC First argument; PRINT $0; PRINTLN;
+    PRINTC Second argument; PRINT $1; PRINTLN;
+    PRINTC Third argument; PRINT $2; PRINTLN;
+    RET;
+END FUN;
+
+SET NUM asfd 333;
+SET NUM uwu 69420;
+
+CALL functionName v asfd c 121 v uwu;

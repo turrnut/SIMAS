@@ -1,0 +1,27 @@
+PRINTC For US Citizens: are you old enough to vote? let's find out!;
+PRINTLN;
+PRINTC Enter your age: ;
+
+SET IN age;
+CONV age NUM;
+
+COPY age condition;
+GTE NUM condition 18;
+
+JUMPV canVote condition;
+
+@ Can't vote;
+PRINTC You can't vote yet!; 
+
+JUMP ending;
+
+LABEL canVote;
+@ Can vote;
+PRINTC You can vote!;
+
+
+LABEL ending;
+PRINTLN;
+PRINTC Thanks for using!;
+PRINTLN;
+PRINTLN;
