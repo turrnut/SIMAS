@@ -34,7 +34,7 @@ same thing applies to `simas`
 #### - str  : a string of characters
 ## INSTRUCTIONS
 #### - @
-* all code after @ is ignored, until a semicolon is seen. this is a comment feature
+* all code after @ in the current line is ignored, until a semicolon is seen. this is a comment feature
 
 #### - add
 * add the value of OPERAND 2 and 3 (as of now can only handle num) the value will be assigned to OPERAND 2, if it is a variable name
