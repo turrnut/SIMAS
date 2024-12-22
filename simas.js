@@ -15,10 +15,11 @@ function run(inputText, isRun, fileName){
     let lnIdx;
 
     let functions = [];
+    let current_function = "";
     let labels = [];
     let lines = [];
     let returnTo = 0;
-
+    
     // assigned in the dispatcher function
     let firstInsIdx;
     
@@ -65,7 +66,7 @@ function run(inputText, isRun, fileName){
           boxes[op1] += Number(op2);
         // if both addends are variable names
         } else if ((isNaN(Number(op1))) && (isNaN(Number(op2)))) {
-          getVar(op1) += Number(getVar(op2));
+          boxes[op1] += Number(boxes[op2]);
         }
       }
     }
@@ -82,18 +83,23 @@ function run(inputText, isRun, fileName){
         let mode = "v";
         let argList = []
         for (let index = 0; index < (callFunction[1] * 2) + 1; index++) {
-          if (mode != "c" && mode != "v") {
-            error.error(`Incorrect mode \"${mode}\", can only be \"c\" or \"v\"`);
+          if (mode != "c" && mode != "v" && mode != "b") {
+            error.error(`Incorrect mode \"${mode}\", can only be \"c\", \"v\" or \"b\".`);
           }
 
           let currentThing = current_ln[firstInsIdx + 1 + index];
-          if (currentThing.toLowerCase() == "v" || currentThing.toLowerCase() == "c" || (firstInsIdx + 1 + index) % 2 == 0) {
+          if (currentThing.toLowerCase() == "v" || currentThing.toLowerCase() == "c" || currentThing.toLowerCase() == "b" || (firstInsIdx + 1 + index) % 2 == 0) {
             mode = currentThing.toLowerCase();
             continue;
           }
           
           if (mode == "v") {
             argList.push(boxes[currentThing]);
+          }
+          else if (mode == "b") {
+            if (currentThing == "true") argList.push(true);
+            else if (currentThing == "false") argList.push(false);
+            else error.error(`Argument "${currentThing}" is not a Boolean constant.`);
           }
           else if (mode == "c") {
             argList.push(currentThing);
@@ -103,12 +109,16 @@ function run(inputText, isRun, fileName){
           const argument = argList[index];
           let argIdx = String(index-1);
           boxes["$" + argIdx] = argument;
+          if ((!isNaN(Number(argument))) && argument !== true && argument !== false) {
+            boxes["$" + argIdx] = Number(argument);
+          }
         }
 
         returnTo = lnIdx;
         lnIdx = callFunction[2];
         inFunction = true;
         execFunction = true;
+        current_function = funName;
         return;
       }
       error.error("Function " + funName + " is not defined.");
@@ -343,6 +353,40 @@ function run(inputText, isRun, fileName){
       execFunction = false;
       lnIdx = returnTo;
       returnTo = 0;
+      if(Number(current_ln.length - firstInsIdx) < 2){
+        return;
+      }
+      // TODO: ret space c/v/b space semicolon????
+      if (Number(current_ln.length-firstInsIdx) < 3) {
+        error.error(`A return value is not specified.`);
+      }
+      
+      switch (current_ln[firstInsIdx + 1].toLowerCase()) {
+        case "c":
+          boxes[`$${current_function}`] = current_ln[firstInsIdx + 2];
+          if ((!isNaN(Number(current_ln[firstInsIdx + 2])))) {
+            boxes[`$${current_function}`] = Number(current_ln[firstInsIdx + 2]);
+          }
+
+        break;
+        case "v":
+          boxes[`$${current_function}`] = boxes[current_ln[firstInsIdx + 2]];
+
+        break;
+        case "b":
+          if (current_ln[firstInsIdx + 2] == "true") boxes[`$${current_function}`] = true;
+          else if (current_ln[firstInsIdx + 2] == "false") boxes[`$${current_function}`] = false;
+          else error.error(`Argument "${current_ln[firstInsIdx + 2]}" is not a Boolean constant.`);
+
+        break;
+
+        case "": break;
+
+        default:
+          error.error(`Invalid return mode \"${current_ln[firstInsIdx + 1]}\".`);
+        break;
+      }
+      current_function = "";
     }
 
     // instruction SET
@@ -352,7 +396,7 @@ function run(inputText, isRun, fileName){
         case "in": boxes[boxIdx] = readline.question(); break;
         case "num": boxes[boxIdx] = Number(newValue); break;
         case "bool":
-          boxes[boxIdx] = newValue === "true" ? true : false;
+          boxes[boxIdx] = newValue.toLowerCase() === "true" ? true : false;
           break;
         case "str":
           let strValue = newValue;

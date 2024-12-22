@@ -45,6 +45,8 @@ same thing applies to `simas`
 #### - call
 * call the function
 * OPERAND 1: the name of the function
+* OPERAND 2 and all even numbered operands beyond that: can only be either `v`, `c`, or `b` which specifies the mode of the argument. `v` is followed by a variable name, `c` is followed by a `str` or `num` constant, while `b` is followed by a `bool` constant.
+* OPERAND 3 and all odd numbered operands beyond that: value of the argument
 
 #### - conv
 * Convert to a different data type
@@ -150,6 +152,8 @@ same thing applies to `simas`
 
 #### - ret
 * signal the end of the execution of function. **IT IS VERY IMPORTANT** to include this at the end of every function(before `end fun;`) because otherwise the function will be stuck in an infinite loop
+* OPERAND 1: optional, but should be used when the function has a return value. put `v` if OPERAND 2 is a variable name, `c` if it a `str` or `num` constant, and `b` if it is a `bool` constant
+* OPERAND 2: optional, but required if operand 1 is present. this operand specifies the return value. note: the return value will be stored in a variable called `$functionName`. For example, the return value for a function like `addThree` would be stored in a variable called `$addThree`.
 
 #### - set
 * assign a value to a variable.

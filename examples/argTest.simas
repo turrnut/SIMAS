@@ -1,12 +1,21 @@
 @ Testing arguments;
-FUN functionName 3;
-    PRINTC First argument; PRINT $0; PRINTLN;
-    PRINTC Second argument; PRINT $1; PRINTLN;
-    PRINTC Third argument; PRINT $2; PRINTLN;
-    RET;
+@ (And return values);
+
+@ This function adds three numbers together and return it;
+FUN addThree 3;
+    PLEASE COPY $0 result;
+    ADD num result $1;
+    ADD num result $2;
+
+    RET v result;
 END FUN;
 
 SET NUM asfd 333;
 SET NUM uwu 69420;
 
-CALL functionName v asfd c 121 v uwu;
+@ v is variable, c is constant;
+@ the v mode specifies that the argument is a variable name;
+@ the c mode specifies that the argument is a str/bool constant;
+@ the b mode specifies that the argument is a boolean constant;
+CALL addThree v asfd c 121 v uwu;
+PRINT $addThree;
