@@ -1,0 +1,32 @@
+@ a program that prints the first ____ fibnacci numbers;
+
+PRINTLN;
+
+@ define how many numbers will be printed;
+PLEASE SET num times 100;
+
+PLEASE SET num first 1;
+PLEASE SET num second 2;
+PLEASE SET num counter 0;
+
+@ A loop;
+LABEL loopLabel;
+
+    SET num next 0;
+    ADD num next first;
+    ADD num next second;
+    
+    PRINT first;
+    
+    COPY second first;
+    COPY next second;
+
+    PRINTLN;
+
+
+    ADD num counter 1;
+    COPY counter condition;
+    ST num condition times;
+
+JUMPV loopLabel condition;
+

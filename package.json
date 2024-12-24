@@ -3,13 +3,13 @@
   "version": "0.0.1",
   "description": "The SIMAS programming language",
   "main": "program.js",
-  "scripts": {
-    "pack": "pkg program.js",
-    "packc": "pkg compiler.js"
-  },
+  "scripts": {},
   "author": "Turrnut",
   "license": "ISC",
   "dependencies": {
     "readline-sync": "^1.4.10"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2"
   }
 }

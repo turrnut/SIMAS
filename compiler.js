@@ -6,7 +6,7 @@ let common = require('./common');
 const compiledFileExtension = ".csa";
 
 if(!process.argv[2]) {
-    process.stderr.write("Error: Please provide an input file to compile.\n");
+    process.stderr.write("Error: Please provide an input file to compile.\nUse the flag -h for help.\n");
     process.exit(1);
 }
 

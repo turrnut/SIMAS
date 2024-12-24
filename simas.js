@@ -37,7 +37,8 @@ function run(inputText, isRun, fileName){
         }
         newText += currentChar;
       }
-      return newText.replace(/\\\\s/g, ';').replace(/\\\\/g, '\\').split(";");
+      // return newText.replace(/\\\\s/g, ';').replace(/\\\\/g, '\\').split(";");
+      return newText.split(";");
     }
     
     // compiling the raw text into executable sequences
@@ -448,7 +449,7 @@ function run(inputText, isRun, fileName){
         }
       }
     }
-  
+
     // ****************************************
   
     function predispatcher(firstInsIdx) {
@@ -557,10 +558,7 @@ function run(inputText, isRun, fileName){
         firstInsIdx ++;
       }
       
-      if (inFunction && !execFunction && current_ln[firstInsIdx].toLowerCase() == "label") {
-        ins_label(current_ln[firstInsIdx+1]);
-        continue;
-      }
+      
       if ((inFunction) && (!execFunction) && (current_ln[firstInsIdx].toLowerCase() != "end")) continue;
       
       dispatcher(firstInsIdx);
