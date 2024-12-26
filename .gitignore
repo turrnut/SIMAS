@@ -1,3 +1,4 @@
 /bin
 /extension
 *.csa
+util/*.js
