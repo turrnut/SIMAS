@@ -6,7 +6,7 @@
 **SIMAS**, which is an acronym for **SIM**ple **AS**sembly, is a dynamically typed, compiled,
 high level, procedural programming language with a syntax that is inspired
 by the Assembly programming language.<br>
-Initially I wrote SIMAS as a simple toy language in the span of three days, but I keep adding features to it so it became what it is today.
+Initially I wrote SIMAS as a simple toy language in the span of three days, but I keep adding features to it so it became what it is today.<br>
 In SIMAS, each line starts with an instruction,
 optionally followed by one or more operands, just like Assembly.<br>
 
