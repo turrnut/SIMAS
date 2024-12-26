@@ -2,7 +2,7 @@
 ![SIMAS BANNER](/images/simasbanner.png)
 # The SIMAS Programming Language
 *Created by: Turrnut*<br>
-**Current Version v0.9**<br>
+**Current Version v1.0**<br>
 **SIMAS**, which is an acronym for **SIM**ple **AS**sembly, is a dynamically typed, compiled,
 high level, procedural programming language with a syntax that is inspired
 by the Assembly programming language. In SIMAS, each line starts with an instruction,
@@ -36,10 +36,16 @@ same thing applies to `simas`
 * all code after @ in the current line is ignored, until a semicolon is seen. this is a comment feature
 
 #### - add
-* add the value of OPERAND 2 and 3 (as of now can only handle num) the value will be assigned to OPERAND 2, if it is a variable name
+* add the value of OPERAND 2 and 3 (as of now can only handle `num`) the value will be assigned to OPERAND 2, if it is a variable name
 * OPERAND 1: the data type of both OPERAND 2 and 3
 * OPERAND 2: the first addend, optionally being a variable name
 * OPERAND 3: the second addend, optionally being a variable name
+
+#### - and
+* performs logical operation AND on OPERAND 2 and 3; the value will be assigned to OPERAND 2, if it is a variable name
+* OPERAND 1: the data type of both OPERAND 2 and 3 (as of now can only handle `bool`) 
+* OPERAND 2: the first boolean variable, optionally being a variable name
+* OPERAND 3: the second boolean variable, optionally being a variable name
 
 #### - call
 * call the function
@@ -98,6 +104,10 @@ same thing applies to `simas`
 * OPERAND 2: the first value, optionally being a variable name
 * OPERAND 3: the second value, optionally being a variable name
 
+#### - import
+* execute the contents of another .simas file
+* OPERAND 1: path to the file 
+
 #### - jump
 * jump to a label. this is an unconditional jump
 * OPERAND 1: name of the label
@@ -131,6 +141,16 @@ same thing applies to `simas`
 * OPERAND 1: data type of OPERANDS 2 and 3
 * OPERAND 2: name of first variable
 * OPERAND 3: name of second variable
+
+#### - not
+* negation logical operator
+* OPERAND 1: name of the variable to be negated
+
+#### - or
+* performs logical operation OR on OPERAND 2 and 3; the value will be assigned to OPERAND 2, if it is a variable name
+* OPERAND 1: the data type of both OPERAND 2 and 3 (as of now can only handle `bool`) 
+* OPERAND 2: the first boolean variable, optionally being a variable name
+* OPERAND 3: the second boolean variable, optionally being a variable name
 
 #### - print
 * print something to the console.

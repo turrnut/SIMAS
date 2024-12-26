@@ -20,7 +20,7 @@ if (process.argv[2] == "-h") {
                 process.stderr.write("Error opening file: " + err.path + "\n");
                 process.exit(1);
             }
-            ins = JSON.stringify(simas.run(data, false, process.argv[2]), null, 0); // last argument could be 4
+            ins = JSON.stringify(simas.run(data, false, process.argv[2], []), null, 0); // last argument could be 4
 
             let target;
             if (process.argv[2]) {

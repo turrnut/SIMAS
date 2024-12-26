@@ -1,6 +1,7 @@
 * [X] convert: convert data type
-* [] arguments, return value
-* [] logical operators
-* [] not operator
-* [] import
-* [] error when variable not exist
+* [X] arguments, return value
+* [X] logical operators
+* [X] not operator
+* [X] import
+* [ ] error when variable not exist
+* [X] import statement recursion error fix?

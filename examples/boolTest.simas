@@ -1,0 +1,16 @@
+@ Testing logical operators;
+
+PRINTLN;
+
+set num me 10;
+set num you 30;
+
+copy you condition;
+
+gte num condition me;
+and bool condition true;
+or bool condition false;
+
+@ should output true;
+print condition;
+

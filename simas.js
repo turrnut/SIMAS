@@ -1,15 +1,21 @@
 const readline = require("readline-sync");
 const error = require("./error");
+let fs = require("fs");
+let path = require("path");
 
 // Input text: Code text
-// isRun     : compile if false, run if true
-// fileName  : name of the file
-function run(inputText, isRun, fileName){
+// isRun         : compile if false, run if true
+// fileName      : name of the file
+// importedFiles : files imported
+function run(inputText, isRun, fileName, importedFiles){
     let instructions = [];
     let boxes = [];
     let current_ln;
     let inFunction = false;
     let execFunction = false;
+
+
+    importedFiles.unshift(path.resolve(path.join(path.dirname(fileName), path.basename(fileName, path.extname(fileName)) + ".simas")));
 
     // iterating index, starting at 0
     let lnIdx;
@@ -69,8 +75,29 @@ function run(inputText, isRun, fileName){
         } else if ((isNaN(Number(op1))) && (isNaN(Number(op2)))) {
           boxes[op1] += Number(boxes[op2]);
         }
+        return;
       }
+      error.error(`Illegal type \"${dataType}\" when performing ADD.`);
     }
+
+    // instruction AND
+    function ins_and(dataType, op1, op2) {
+      if (dataType.toLowerCase() == "bool") {
+        // if op1 is a variable name but op2 is a boolean
+        if ((op1 != "true" && op1 != "false") && (op2 == "true" || op2 == "false")) {
+          if(op2 == "true") op2 = true;
+          else op2 = false;
+          boxes[op1] = (boxes[op1] && op2);
+        }
+        // if both operands are variable names
+       else if ((op1 != "true" && op1 != "false") && (op2 != "true" && op2 != "false")) {
+        boxes[op1] = (boxes[op1] && boxes[op2]);
+      }
+      return;
+     }
+     error.error(`Illegal type \"${dataType}\" when performing AND.`);
+    }
+    
 
     // instruction CALL
     function ins_call(funName) {
@@ -161,7 +188,9 @@ function run(inputText, isRun, fileName){
           if (Number(boxes[op2]) == 0) error.error("Division by 0.");
           boxes[op1] /= Number(boxes[op2]);
         }
+        return;
       }
+      error.error(`Illegal type \"${dataType}\" when performing DIV.`);
     }
 
     // instruction END
@@ -182,9 +211,10 @@ function run(inputText, isRun, fileName){
 
         } else if (dataType.toLowerCase() == "str") {
           boxes[op1] = String(boxes[op1]) === String(op2);
-        }
-        if (dataType.toLowerCase() == "bool") {
+        } else if (dataType.toLowerCase() == "bool") {
             boxes[op1] = Boolean(boxes[op1]) === Boolean(op2);
+        } else {
+          error.error(`Illegal type \"${dataType}\" when performing EQC.`);
         }
       }
   
@@ -195,8 +225,10 @@ function run(inputText, isRun, fileName){
       } else if (dataType.toLowerCase() == "str") {
         boxes[op1] = String(boxes[op1]) === String(boxes[op2]); 
       }
-      if (dataType.toLowerCase() == "bool") {
+      else if (dataType.toLowerCase() == "bool") {
         boxes[op1] = Boolean(boxes[op1]) === Boolean(boxes[op2]);
+      } else {
+        error.error(`Illegal type \"${dataType}\" when performing EQV.`);
       }
     }
 
@@ -208,8 +240,10 @@ function run(inputText, isRun, fileName){
         } else if (dataType.toLowerCase() == "str") {
           boxes[op1] = String(boxes[op1]) !== String(op2);
         }
-        if (dataType.toLowerCase() == "bool") {
+        else if (dataType.toLowerCase() == "bool") {
             boxes[op1] = Boolean(boxes[op1]) !== Boolean(op2);
+        } else {
+          error.error(`Illegal type \"${dataType}\" when performing NEQC.`);
         }
       }
   
@@ -220,9 +254,37 @@ function run(inputText, isRun, fileName){
       } else if (dataType.toLowerCase() == "str") {
         boxes[op1] = String(boxes[op1]) !== String(boxes[op2]); 
       }
-      if (dataType.toLowerCase() == "bool") {
+      else if (dataType.toLowerCase() == "bool") {
         boxes[op1] = Boolean(boxes[op1]) !== Boolean(boxes[op2]);
+      } else {
+        error.error(`Illegal type \"${dataType}\" when performing NEQV.`);
       }
+    }
+
+    // instruction NOT
+    function ins_not(varName) {
+      if (boxes[varName] !== true && boxes[varName] !== false) {
+        error.error(`Variable ${varName} is not a Boolean variable.`);
+      }
+      boxes[varName] = !boxes[varName];
+    }
+
+    // instruction OR
+    function ins_or(dataType, op1, op2) {
+      if (dataType.toLowerCase() == "bool") {
+          // if op1 is a variable name but op2 is a boolean
+        if ((op1 != "true" && op1 != "false") && (op2 == "true" || op2 == "false")) {
+            if(op2 == "true") op2 = true;
+            else op2 = false;
+            boxes[op1] = (boxes[op1] || op2);
+          }
+          // if both operands are variable names
+          else if ((op1 != "true" && op1 != "false") && (op2 != "true" && op2 != "false")) {
+          boxes[op1] = (boxes[op1] || boxes[op2]);
+        }
+        return;
+      }
+      error.error(`Illegal type \"${dataType}\" when performing OR.`);
     }
 
     // instruction FUN
@@ -244,7 +306,7 @@ function run(inputText, isRun, fileName){
         }
         return;
       }
-      error.error("Invalid data types.");
+      error.error(`Illegal type \"${dataType}\" when performing GT.`);
     }
     
     // instruction GTE
@@ -259,7 +321,23 @@ function run(inputText, isRun, fileName){
         }
         return;
       }
-      error.error("Invalid data types.");
+      error.error(`Illegal type \"${dataType}\" when performing GTE.`);
+    }
+
+    function ins_import(file) {
+      if (importedFiles.includes(path.resolve(file))) {
+        return;
+      }
+      importedFiles.unshift(path.resolve(file));
+
+      
+      try {
+        const data = fs.readFileSync(path.resolve(file), 'utf8');
+        run(run(data, false, path.resolve(file), importedFiles), true, path.resolve(file), importedFiles);
+      } catch (err) {
+          error.error("Unknown error in file " + path.resolve(file) + " while trying to import. Please make sure that the file exists.");
+      }
+    
     }
 
     // instruction JUMP
@@ -313,7 +391,9 @@ function run(inputText, isRun, fileName){
         } else if ((isNaN(Number(op1))) && (isNaN(Number(op2)))) {
           boxes[op1] *= Number(boxes[op2]);
         }
+        return;
       }
+      error.error(`Illegal type \"${dataType}\" when performing MUL.`);
     }
         
     // instruction PRINT
@@ -420,7 +500,7 @@ function run(inputText, isRun, fileName){
         }
         return;
       }
-      error.error("Invalid data types.");
+      error.error(`Illegal type \"${dataType}\" when performing ST.`);
     }
     
     // instruction STE
@@ -435,7 +515,7 @@ function run(inputText, isRun, fileName){
         }
         return;
       }
-      error.error("Invalid data types.");
+      error.error(`Illegal type \"${dataType}\" when performing STE.`);
     }
       // instruction ADD
     function ins_sub(dataType, op1, op2) {
@@ -447,7 +527,9 @@ function run(inputText, isRun, fileName){
         } else if ((isNaN(Number(op1))) && (isNaN(Number(op2)))) {
           boxes[op1] -= Number(boxes[op2]);
         }
+        return;
       }
+      error.error(`Illegal type \"${dataType}\" when performing SUB.`);
     }
 
     // ****************************************
@@ -465,6 +547,7 @@ function run(inputText, isRun, fileName){
       if (fi.startsWith("@")) return;
 
       switch (fi.toLowerCase()) {
+        case "import" : ins_import(o1);      break;
         case "label"  : ins_label(o1);       break;
         default: return;
       }
@@ -484,6 +567,7 @@ function run(inputText, isRun, fileName){
 
       switch (fi.toLowerCase()) {
         case "add"    : ins_add(o1, o2, o3); break;
+        case "and"    : ins_and(o1, o2, o3); break;
         case "call"   : ins_call(o1);        break;
         case "@"      : ins_comment();       break;
         case "conv"   : ins_conv(o1, o2);    break;
@@ -495,12 +579,15 @@ function run(inputText, isRun, fileName){
         case "fun"    : ins_fun(o1, o2);     break;
         case "gt"     : ins_gt(o1, o2, o3);  break;
         case "gte"    : ins_gte(o1, o2, o3); break;
+        case "import" :                      break;
         case "jump"   : ins_jump(o1);        break;
         case "jumpv"  : ins_jumpv(o1, o2);   break;
         case "label"  :                      break;
         case "mul"    : ins_mul(o1, o2, o3); break;
         case "neqc"   : ins_neqc(o1,o2,o3);  break;
         case "neqv"   : ins_neqv(o1,o2,o3);  break;
+        case "not"    : ins_not(o1);         break;
+        case "or"     : ins_or(o1, o2, o3);  break;
         case "print"  : ins_print(o1);       break;
         case "printc" : ins_printc(o1);      break;
         case "println": ins_println();       break;
