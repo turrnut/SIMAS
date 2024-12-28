@@ -43,8 +43,8 @@ function run(inputText, isRun, fileName, importedFiles){
         }
         newText += currentChar;
       }
-      // return newText.replace(/\\\\s/g, ';').replace(/\\\\/g, '\\').split(";");
-      return newText.split(";");
+      return newText.replace(/\\n/g, '\n').replace(/\\\\/g, '\\').split(";");
+      // return newText.split(";");
     }
     
     // compiling the raw text into executable sequences
@@ -419,8 +419,19 @@ function run(inputText, isRun, fileName, importedFiles){
     function ins_prints() {
       process.stdout.write(" ");
     }
+
+    // instruction QUIT
     function ins_quit() {
       process.exit(0);
+    }
+
+    // instruction READ
+    function ins_read(file_name, variable){
+      try {
+        boxes[variable] = fs.readFileSync(path.resolve(file_name), 'utf8');
+      } catch (err) {
+          error.error("Error while trying reading file \"" + path.resolve(file_name) + "\"");
+      }
     }
     
     // instruction COPY
@@ -517,7 +528,7 @@ function run(inputText, isRun, fileName, importedFiles){
       }
       error.error(`Illegal type \"${dataType}\" when performing STE.`);
     }
-      // instruction ADD
+      // instruction SUB
     function ins_sub(dataType, op1, op2) {
       if (dataType.toLowerCase() == "num") {
         // if minuend is a variable name but subtrahend is a number
@@ -530,6 +541,29 @@ function run(inputText, isRun, fileName, importedFiles){
         return;
       }
       error.error(`Illegal type \"${dataType}\" when performing SUB.`);
+    }
+
+    // instruction WRITE
+    function ins_write(file_name, contents) {
+      let the_thing = contents;
+      for(let i = firstInsIdx + 3; i < current_ln.length; i ++) {
+        the_thing += " " + current_ln[i];
+      }
+
+      try {
+        fs.writeFileSync(path.resolve(file_name), the_thing);
+      } catch (err) {
+        error.error(`Error writing to file \"${file_name}\"`);
+      }
+    }
+
+    // instruction WRITEV
+    function ins_writev(file_name, variable) {
+      try {
+        fs.writeFileSync(path.resolve(file_name), String(boxes[variable]));
+      } catch (err) {
+        error.error(`Error writing to file \"${file_name}\"`);
+      }
     }
 
     // ****************************************
@@ -593,11 +627,14 @@ function run(inputText, isRun, fileName, importedFiles){
         case "println": ins_println();       break;
         case "prints" : ins_prints();        break;
         case "quit"   : ins_quit();          break;
+        case "read"   : ins_read(o1, o2);    break;
         case "ret"    : ins_ret();           break;
         case "set"    : ins_set(o1, o2, o3); break;
         case "st"     : ins_st(o1, o2, o3);  break;
         case "ste"    : ins_ste(o1, o2, o3); break;
         case "sub"    : ins_sub(o1, o2, o3); break;
+        case "write"  : ins_write(o1, o2);   break;
+        case "writev" : ins_writev(o1, o2);  break;
         
         default: error.error("Unknown instruction: " + fi);
       }
