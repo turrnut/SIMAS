@@ -2,10 +2,9 @@
 ![SIMAS BANNER](/images/simasbanner.png)
 # The SIMAS Programming Language
 *Created by: Turrnut*<br>
-**Current Version v1.0**<br>
+**Current Version v1.1**<br>
 **SIMAS**, which is an acronym for **SIM**ple **AS**sembly, is a dynamically typed, compiled,
-high level, procedural programming language with a syntax that is inspired
-by the Assembly programming language.<br>
+high level, procedural programming language with a syntax that is inspired by the Assembly programming language.<br>
 Initially I wrote SIMAS as a simple toy language in the span of three days, but I keep adding features to it so it became what it is today.<br>
 In SIMAS, each line starts with an instruction,
 optionally followed by one or more operands, just like Assembly.<br>
@@ -22,7 +21,8 @@ then run the `.csa` file with `simas`
 To access arguments within a function, use `$` followed by a number. For example, `$0` is the first argument, `$1` is the second argument, and so on.<br>
 If you want to be polite to SIMAS, you can add `PLEASE` (case-insensitive) and a space character
 in front of any instruction. However, SIMAS will ignore your politeness by ignoring `PLEASE`. <br>
-For example, `PLEASE PRINTC Hello!;` and `PRINTC Hello!;` does the same thing
+For example, `PLEASE PRINTC Hello!;` and `PRINTC Hello!;` does the same thing.<br>
+All occurences of `\n` will be replaced with a new line, and `\\` with `\`.
 
 **Troubleshooting** <br>
 If you're on a UNIX system(MacOS, Linux) and can't run the `simasc`, try running `chmod +x ./simasc`,
@@ -33,7 +33,7 @@ same thing applies to `simas`
 #### - bool : a boolean value.
 #### - num  : a number, can be an integer or a decimal
 #### - str  : a string of characters
-## INSTRUCTIONS
+### INSTRUCTIONS
 #### - @
 * all code after @ in the current line is ignored, until a semicolon is seen. this is a comment feature
 
@@ -171,6 +171,11 @@ same thing applies to `simas`
 #### - quit
 * quits the program
 
+#### - read
+* read from a file
+* OPERAND 1: path to the file
+* OPERAND 2: name of a variable to store the data of the file in
+
 #### - ret
 * signal the end of the execution of function. **IT IS VERY IMPORTANT** to include this at the end of every function(before `end fun;`) because otherwise the function will be stuck in an infinite loop
 * OPERAND 1: optional, but should be used when the function has a return value. put `v` if OPERAND 2 is a variable name, `c` if it a `str` or `num` constant, and `b` if it is a `bool` constant
@@ -200,3 +205,12 @@ same thing applies to `simas`
 * OPERAND 2: the subtrahend, optionally being a variable name
 * OPERAND 3: the minuend, optionally being a variable name
 
+#### - write
+* write to a file after erasing all of its contents
+* OPERAND 1: path of the file
+* OPERAND 2: text to write
+
+#### - writev
+* write to a file after erasing all of its contents. same as `write` but writing variables
+* OPREAND 1: path of the file
+* OPERAND 2: name of the variable whose contents will be written to the file.
