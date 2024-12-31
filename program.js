@@ -5,11 +5,12 @@ let common = require('./common');
 let tools = require("./util/tools");
 
 if(!process.argv[2]) {
-    process.stderr.write("Error: Please provide an input file to run.\nUse the flag -h for help.\n");
-    process.exit(1);
+    simas.run("", true, "<simas_shell>", [], repl=true);
+    // process.stderr.write("Error: Please provide an input file to run.\nUse the flag -h for help.\n");
+    // process.exit(1);
 }
 
-if (process.argv[2].toLowerCase() == "-h") {
+else if (process.argv[2].toLowerCase() == "-h") {
     process.stdout.write(common.runtime_information);
 } else if (process.argv[2].toLowerCase() == "init") {
     if(process.argv.length < 4) {

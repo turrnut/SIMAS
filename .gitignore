@@ -1,4 +1,4 @@
 /bin
-/extension
 *.csa
 util/*.js
+/ignore

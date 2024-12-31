@@ -1,7 +1,11 @@
 let current_ln_str = [];
 let current_file;
+let repl_stat;
 function setCurrentFile(currentfile) {
     current_file = currentfile;
+}
+function set_repl(repl) {
+    repl_stat = repl;
 }
 
 function setCurrentLine(current_ln) {
@@ -15,7 +19,9 @@ function setCurrentLine(current_ln) {
 function error(message) {
     console.log();
     console.log(`RUNTIME ERROR:\n  \"${current_ln_str}\"\n  At file ${current_file}\n${message}`);
-    process.exit(1);
+    if (!repl_stat) {
+        process.exit(1);
+    }
 }
 
-module.exports = {error, setCurrentLine, setCurrentFile};
+module.exports = {error, setCurrentLine, setCurrentFile, set_repl};
