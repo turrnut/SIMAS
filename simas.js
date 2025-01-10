@@ -1,6 +1,6 @@
 const readline = require("readline-sync");
-const fs = require("fs");
 const path = require("path");
+const fs = require("fs");
 const http = require("http");
 
 const error = require("./error");
@@ -14,6 +14,7 @@ let functions = [];
 // isRun         : compile if false, run if true
 // fileName      : name of the file
 // importedFiles : files imported
+// repl          : if running a REPL. default to false.
 function run(inputText, isRun, fileName, importedFiles, repl=false){
   let instructions = [];
   let current_ln;
@@ -30,6 +31,7 @@ function run(inputText, isRun, fileName, importedFiles, repl=false){
   
   let current_function = "";
   let lines = [];
+  let implines = [];
   let returnTo = 0;
   
   // assigned in the dispatcher function
@@ -53,8 +55,8 @@ function run(inputText, isRun, fileName, importedFiles, repl=false){
     // return newText.split(";");
   }
   
-  // compiling the raw text into executable sequences
-  function compile() {
+  // lexing the raw text into executable sequences
+  function lexer() {
     lines = filterText();
     for(let a = 0; a < lines.length; a ++) {
       if (lines[a] == "") {
@@ -393,14 +395,17 @@ function run(inputText, isRun, fileName, importedFiles, repl=false){
       }
       importedFiles.unshift(path.resolve(file));
 
-      
+      let instructions_of_imported_file = [];
+
       try {
         const data = fs.readFileSync(path.resolve(file), 'utf8');
-        run(run(data, false, path.resolve(file), importedFiles), true, path.resolve(file), importedFiles);
+        instructions_of_imported_file = run(data, false, path.resolve(file), importedFiles);
       } catch (err) {
-          error.error("Unknown error in file " + path.resolve(file) + " while trying to import. Please make sure that the file exists.");
+        error.errorc("Unknown error in file " + path.resolve(file) + " while trying to import. Please make sure that the file exists.");
       }
-    
+      
+      
+      implines = implines.concat(instructions_of_imported_file);
     }
 
     // instruction JUMP
@@ -630,7 +635,26 @@ function run(inputText, isRun, fileName, importedFiles, repl=false){
     }
 
     // ****************************************
-  
+
+    
+    function compdispatcher(firstInsIdx) {
+      // First Instruction
+      let fi = current_ln[firstInsIdx];
+
+      // first, second operand, etc...
+      let o1 = current_ln[firstInsIdx + 1];
+      let o2 = current_ln[firstInsIdx + 2];
+      let o3 = current_ln[firstInsIdx + 3];
+      
+      // Check if comment
+      if (fi.startsWith("@")) return;
+
+      switch (fi.toLowerCase()) {
+        case "import" : ins_import(o1);     break;
+        default: return;
+      }
+    }
+
     function predispatcher(firstInsIdx) {
       // First Instruction
       let fi = current_ln[firstInsIdx];
@@ -644,7 +668,7 @@ function run(inputText, isRun, fileName, importedFiles, repl=false){
       if (fi.startsWith("@")) return;
 
       switch (fi.toLowerCase()) {
-        case "import" : ins_import(o1);      break;
+        case "import" :                      break;
         case "label"  : ins_label(o1);       break;
         default: return;
       }
@@ -766,7 +790,7 @@ function run(inputText, isRun, fileName, importedFiles, repl=false){
             console.log("");
             continue;
           }
-          compile();
+          lexer();
           interpret();
           inputText = "";
           instructions = [];
@@ -779,21 +803,34 @@ function run(inputText, isRun, fileName, importedFiles, repl=false){
 
     // purely compiling
     if(!isRun) {
+      lexer();
       compile();
-      return instructions;
+      return implines.concat(instructions);
     }
     // executing
     else {
       instructions = inputText;
     }
 
+    function compile(){
+      for(lnIdx = 0; lnIdx < instructions.length; lnIdx ++) {
+        current_ln = instructions[lnIdx];
+        error.setCurrentLine(current_ln);
+        firstInsIdx = 0;
+        compdispatcher(firstInsIdx);
+      }
+    }
+    
     function interpret(){
       // preiterate lines
       for(lnIdx = 0; lnIdx < instructions.length; lnIdx ++) {
         current_ln = instructions[lnIdx];
         error.setCurrentLine(current_ln);
         firstInsIdx = 0;
-        while (current_ln[firstInsIdx] == "" || current_ln[firstInsIdx].toLowerCase() == "please") {
+        while(current_ln[firstInsIdx] == "") {
+          firstInsIdx ++;
+        }
+        while (current_ln[firstInsIdx].toLowerCase() == "please") {
           firstInsIdx ++;
         }
         if ((inFunction) && (!execFunction) && (current_ln[firstInsIdx].toLowerCase() != "end")) continue;

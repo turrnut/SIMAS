@@ -2,7 +2,7 @@
 ![SIMAS BANNER](/images/simasbanner.png)
 # The SIMAS Programming Language
 *Created by: Turrnut*<br>
-**Current Version v1.1**<br>
+**Current Version v2.0**<br>
 **SIMAS**, which is an acronym for **SIM**ple **AS**sembly, is a dynamically typed, compiled,
 high level, procedural programming language with a syntax that is inspired by the Assembly programming language.<br>
 Initially I wrote SIMAS as a simple toy language in the span of three days, but I keep adding features to it so it became what it is today.<br>
@@ -180,6 +180,11 @@ same thing applies to `simas`
 * signal the end of the execution of function. **IT IS VERY IMPORTANT** to include this at the end of every function(before `end fun;`) because otherwise the function will be stuck in an infinite loop
 * OPERAND 1: optional, but should be used when the function has a return value. put `v` if OPERAND 2 is a variable name, `c` if it a `str` or `num` constant, and `b` if it is a `bool` constant
 * OPERAND 2: optional, but required if operand 1 is present. this operand specifies the return value. note: the return value will be stored in a variable called `$functionName`. For example, the return value for a function like `addThree` would be stored in a variable called `$addThree`.
+
+#### - server
+* make a server that hosts a static website
+* OPERAND 1: path to the directory containing static website files
+* OPERAND 2: port number
 
 #### - set
 * assign a value to a variable.

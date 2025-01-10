@@ -23,5 +23,12 @@ function error(message) {
         process.exit(1);
     }
 }
+function errorc(message) {
+    console.log();
+    console.log(`COMPILER ERROR:\n  \"${current_ln_str}\"\n  At file ${current_file}\n${message}`);
+    if (!repl_stat) {
+        process.exit(1);
+    }
+}
 
-module.exports = {error, setCurrentLine, setCurrentFile, set_repl};
+module.exports = {error, errorc, setCurrentLine, setCurrentFile, set_repl};
