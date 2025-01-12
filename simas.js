@@ -49,6 +49,11 @@ function run(inputText, isRun, fileName, importedFiles, repl=false){
         case "\r" : continue;
         case "\n" : continue;
       }
+
+      if (currentChar == "\t") {
+        newText += "    ";
+        continue;
+      }
       newText += currentChar;
     }
     return newText.replace(/\\n/g, '\n').replace(/\\\\/g, '\\').split(";");
