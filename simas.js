@@ -122,7 +122,7 @@ function run(inputText, isRun, fileName, importedFiles, repl=false){
       let callFunction = functions[funIdx];
       // get args
       let mode = "v";
-      let argList = []
+      let argList = [];
       for (let index = 0; index < (callFunction[1] * 2) + 1; index++) {
         if (mode != "c" && mode != "v" && mode != "b") {
           error.error(`Incorrect mode \"${mode}\", can only be \"c\", \"v\" or \"b\".`);
@@ -165,11 +165,12 @@ function run(inputText, isRun, fileName, importedFiles, repl=false){
     error.error("Function " + funName + " is not defined.");
   }
   
-  // instruction CMT or COMMENT
+  // comments
   function ins_comment() {
     return;
   }
 
+  // instruction CONV
   function ins_conv(varName, dType) {
     switch(dType.toLowerCase()) {
       default: error.error(`Cannot convert the variable ${varName} to data type "${dType}, which is a non-existent data type.`);
@@ -735,7 +736,7 @@ function run(inputText, isRun, fileName, importedFiles, repl=false){
 
     if(repl) {
       console.log(`SIMAS Programming Language Shell v${common.version} ${common.copyright}`);
-      console.log(`Type !help for more information.`)
+      console.log(`Type !help for more information.`);
       console.log();
       try {
         while(true) {
