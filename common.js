@@ -1,6 +1,6 @@
 // a file that is included in both compiler.js and program.js
 
-const version = "2.0"
+const version = "2.1";
 const year = "2025";
 
 const copyright = `Copyright (c) ${year} Turrnut`;
