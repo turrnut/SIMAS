@@ -1,6 +1,8 @@
 
 ![SIMAS BANNER](/images/simasbanner.png)
 # The SIMAS Programming Language
+![License](https://img.shields.io/github/languages/code-size/turrnut/SIMAS?style=for-the-badge)
+![Code Size](https://img.shields.io/github/languages/code-size/turrnut/SIMAS?style=for-the-badge)
 *Created by: Turrnut*<br>
 **Current Version v2.0**<br>
 **SIMAS**, which is an acronym for **SIM**ple **AS**sembly, is a dynamically typed, compiled,
@@ -8,20 +10,22 @@ high level, procedural programming language with a syntax that is inspired by th
 Initially I wrote SIMAS as a simple toy language in the span of three days, but I keep adding features to it so it became what it is today.<br>
 In SIMAS, each line starts with an instruction,
 optionally followed by one or more operands, just like Assembly.<br>
+To run a SIMAS program, compile it first using the `simasc` compiler, it should generate a `.csa` file,
+then run the `.csa` file with `simas`
 
+**Additional Notes** <br>
 The instruction and its operands are separated a space character and one space only. If there are
 multiple spaces, the program might enter unexpected behavior. Also, lines of code are separated by semicolons, as new lines are ignored. <br>
 
 SIMAS is case-sensitive, although instructions and data types are not. <br>
 
-To run a SIMAS program, compile it first using the `simasc` compiler, it should generate a `.csa` file,
-then run the `.csa` file with `simas`
-
-**Additional Notes** <br>
 To access arguments within a function, use `$` followed by a number. For example, `$0` is the first argument, `$1` is the second argument, and so on.<br>
+
 If you want to be polite to SIMAS, you can add `PLEASE` (case-insensitive) and a space character
 in front of any instruction. However, SIMAS will ignore your politeness by ignoring `PLEASE`. <br>
+
 For example, `PLEASE PRINTC Hello!;` and `PRINTC Hello!;` does the same thing.<br>
+
 All occurences of `\n` will be replaced with a new line, and `\\` with `\`.
 
 **Troubleshooting** <br>

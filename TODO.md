@@ -6,6 +6,9 @@
 * [ ] error when variable not exist
 * [X] import statement recursion error fix?
 * [X] escape character
-* [ ] IO operations
+* [X] IO operations
 * [ ] string operations
 * [ ] math functions
+* [ ] arrays
+* [ ] add a package manager
+* [ ] sockets & networking
