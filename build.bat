@@ -35,13 +35,13 @@ REM Create bin directory structure
 echo Creating directory structure...
 mkdir bin
 cd bin
-mkdir win
+mkdir windows
 mkdir macos
 mkdir linux
 
 REM Build for Windows
 echo Building for Windows...
-cd win
+cd windows
 call pkg -t node18-win-x64 -o simasc.exe ..\..\compiler.js
 if %errorlevel% neq 0 (
     echo Failed to build simasc.exe for Windows

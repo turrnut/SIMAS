@@ -7,10 +7,10 @@ tsc
 cd ..
 mkdir bin
 cd bin
-mkdir win
+mkdir windows
 mkdir macos
 mkdir linux
-cd win
+cd windows
 pkg -t node18-win-x64 -o simasc.exe ../../compiler.js
 pkg -t node18-win-x64 -o simas.exe ../../program.js
 cd ..
