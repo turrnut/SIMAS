@@ -1,0 +1,10 @@
+fun ask_name 0;
+  printc Name:;
+  set in name;
+  ret v name;
+end fun;
+
+call ask_name;
+printc Hello, ;
+print $ask_name;
+printc !;
