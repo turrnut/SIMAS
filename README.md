@@ -1,10 +1,10 @@
 
 ![SIMAS BANNER](/images/simasbanner.png)
 # The SIMAS Programming Language
-![License](https://img.shields.io/github/languages/code-size/turrnut/SIMAS?style=for-the-badge)
-![Code Size](https://img.shields.io/github/languages/code-size/turrnut/SIMAS?style=for-the-badge)
 *Created by: Turrnut*<br>
 **Current Version v2.0**<br>
+![License](https://img.shields.io/github/license/turrnut/SIMAS?style=for-the-badge)
+![Code Size](https://img.shields.io/github/languages/code-size/turrnut/SIMAS?style=for-the-badge)<br>
 **SIMAS**, which is an acronym for **SIM**ple **AS**sembly, is a dynamically typed, compiled,
 high level, procedural programming language with a syntax that is inspired by the Assembly programming language.<br>
 Initially I wrote SIMAS as a simple toy language in the span of three days, but I keep adding features to it so it became what it is today.<br>
