@@ -9,13 +9,14 @@ const common = require("./common");
 let boxes = [];
 let labels = [];
 let functions = [];
+let lists = [];
 
 // Input text: Code text
 // isRun         : compile if false, run if true
 // fileName      : name of the file
 // importedFiles : files imported
 // repl          : if running a REPL. default to false.
-function run(inputText, isRun, fileName, importedFiles, repl=false){
+function run(inputText, isRun, fileName, importedFiles, repl=false) {
   let instructions = [];
   let current_ln;
   let inFunction = false;
@@ -226,7 +227,7 @@ function run(inputText, isRun, fileName, importedFiles, repl=false){
       } else if (dataType.toLowerCase() == "str") {
         boxes[op1] = String(boxes[op1]) === String(op2);
       } else if (dataType.toLowerCase() == "bool") {
-          boxes[op1] = Boolean(boxes[op1]) === Boolean(op2);
+          boxes[op1] = Boolean(boxes[op1]) === (op2.toLowerCase() === "true" ? true : false);
       } else {
         error.error(`Illegal type \"${dataType}\" when performing EQC.`);
       }
@@ -455,6 +456,156 @@ function run(inputText, isRun, fileName, importedFiles, repl=false){
       labels.unshift([label_name, lnIdx]);
     }
     
+    // instruction LIST
+    function ins_list (opType, options) {
+      // for index specific actions
+      let list_in_question = [];
+
+      switch (opType) {
+        case "new":
+          // options 1 = list name
+          let listname = options[0];
+          lists[listname] = [];
+          break;
+        case "appv":
+          // options 0 = list name
+          // options 1 = data type, str/num/bool
+          // options 2 = variable name
+          if (options.length != 3) { error.error("Incorrect number of operands."); }
+
+          let newid = lists[options[0]].length;
+          
+          if (options[1].toLowerCase() == "num")  lists[options[0]][newid] = Number(boxes[options[2]]);
+          if (options[1].toLowerCase() == "str")  lists[options[0]][newid] = String(boxes[options[2]]);
+          if (options[1].toLowerCase() == "bool") lists[options[0]][newid] = Boolean(boxes[options[2]]);
+          
+          break;
+        case "appc":
+          // options 0 = list name
+          // options 1 = data type, str/num/bool
+          // options 2 = the constant
+          if (options.length < 3) { error.error("Incorrect number of operands."); }
+
+          let newwid = lists[options[0]].length;
+          
+          if (options[1].toLowerCase() == "num")  lists[options[0]][newwid] = Number(options[2]);
+          if (options[1].toLowerCase() == "bool") lists[options[0]][newwid] = (options[2].toLowerCase() == "true" ? true : false);
+          if (options[1].toLowerCase() == "str")  {
+            let beingadded = String(options[2]);
+
+            for(let q = 3 ; q < options.length; q ++) {
+              beingadded += " ";
+              beingadded += String(options[q]);
+            }
+            lists[options[0]][newwid] = String(beingadded);
+          }
+          
+          break;
+        case "upv":
+          // options 0 = list name
+          // options 1 = index
+          // options 2 = data type, str/num/bool
+          // options 3 = variable name
+          
+          if (options.length != 4) { error.error("Incorrect number of operands."); }
+
+          let newidx = Number(options[1]);
+          
+          list_in_question = lists[options[0]];
+          if ((newidx <= 0) || (newidx > list_in_question.length) || (list_in_question[newidx-1] == undefined)) 
+            error.error(`Index out of bounds.`);
+          
+          newidx --;
+
+          if (options[2].toLowerCase() == "num")  lists[options[0]][newidx] = Number(boxes[options[3]]);
+          if (options[2].toLowerCase() == "str")  lists[options[0]][newidx] = String(boxes[options[3]]);
+          if (options[2].toLowerCase() == "bool") lists[options[0]][newidx] = Boolean(boxes[options[3]]);
+          
+          break;
+        case "upc":
+          // options 0 = list name
+          // options 1 = index
+          // options 2 = data type, str/num/bool
+          // options 3 = the constant
+          if (options.length < 4) { error.error("Incorrect number of operands."); }
+
+          let newwidx = Number(options[1]);
+          
+          list_in_question = lists[options[0]];
+          if ((newwidx <= 0) || (newwidx > list_in_question.length) || (list_in_question[newwidx-1] == undefined)) 
+            error.error(`Index out of bounds.`);
+
+          newwidx --;
+
+          if (options[2].toLowerCase() == "num")  lists[options[0]][newwidx] = Number(options[3]);
+          if (options[2].toLowerCase() == "bool") lists[options[0]][newwidx] = (options[3].toLowerCase() == "true" ? true : false);
+          if (options[2].toLowerCase() == "str")  {
+            let beingadded = String(options[3]);
+
+            for(let q = 4 ; q < options.length; q ++) {
+              beingadded += " ";
+              beingadded += String(options[q]);
+            }
+            lists[options[0]][newwidx] = String(beingadded);
+          }
+          
+          break;
+        case "del":
+          // options 0 = list
+          // options 1 = index
+          if (options.length != 2) { error.error("Incorrect number of operands."); }
+
+          list_in_question = lists[options[0]];
+          let delidx = Number(options[1]);
+          if ((delidx <= 0) || (delidx > list_in_question.length) || (list_in_question[delidx-1] == undefined)) 
+            error.error(`Index out of bounds.`);
+          delidx --;
+          
+          list_in_question.splice(delidx, 1);
+          lists[options[0]] = list_in_question;
+          break;
+        case "len":
+          // options 0 = list name
+          // options 1 = assign to variable
+
+          if (options.length != 2) { error.error("Incorrect number of operands."); }
+
+          boxes[options[1]] = Number(lists[options[0]].length);
+          break;
+        case "acc":
+          // options 0 = list name
+          // options 1 = index
+          // options 2 = assign to variable
+          list_in_question = lists[options[0]];
+
+          let idx = Number(options[1]);
+          if ((idx <= 0) || (idx >= list_in_question.length + 1) || (list_in_question[idx] == undefined)) 
+            error.error(`Index out of bounds.`);
+
+          idx --;
+
+          boxes[options[2]] = list_in_question[idx];
+          
+          break;
+        case "show":
+          // options 0 = list name
+          let show = "[";
+          for(let showindex = 0; showindex < lists[options[0]].length; showindex ++){
+            if (typeof lists[options[0]][showindex] == "string") show += `"${lists[options[0]][showindex]}"`;
+            else show += lists[options[0]][showindex];
+            
+            if (!(showindex + 1 < lists[options[0]].length)) show += "";
+            else show += ",";
+            
+          }
+          show += "]";
+          process.stdout.write(show);
+          break;
+        default:
+          error.error(`Invalid list operation "${opType}".`);
+      }
+    }
+
     // instruction MUL
     function ins_mul(dataType, op1, op2) {
       if (dataType.toLowerCase() == "num") {
@@ -642,6 +793,28 @@ function run(inputText, isRun, fileName, importedFiles, repl=false){
 
     // ****************************************
 
+    // determine operands count
+    function doc(thing, fii) {
+      let i = fii + 2;
+      let optionsindex = 0;
+      let options = [];
+      do {
+        if (thing[i] == undefined) {
+          if (i == 2) {
+            error.error("Incorrect number of operands.");
+          }
+          return options;
+        }
+        
+        options[optionsindex] = thing[i]; 
+
+        optionsindex ++;
+        i++;
+      } while(true);
+    }
+
+    // ****************************************
+
     
     function compdispatcher(firstInsIdx) {
       // First Instruction
@@ -688,47 +861,48 @@ function run(inputText, isRun, fileName, importedFiles, repl=false){
       let o1 = current_ln[firstInsIdx + 1];
       let o2 = current_ln[firstInsIdx + 2];
       let o3 = current_ln[firstInsIdx + 3];
-      
+
       // Check if comment
       if (fi.startsWith("@")) return;
 
       switch (fi.toLowerCase()) {
-        case "add"    : ins_add(o1, o2, o3); break;
-        case "and"    : ins_and(o1, o2, o3); break;
-        case "call"   : ins_call(o1);        break;
-        case "@"      : ins_comment();       break;
-        case "conv"   : ins_conv(o1, o2);    break;
-        case "copy"   : ins_copy(o1, o2);    break;
-        case "div"    : ins_div(o1, o2, o3); break;
-        case "end"    : ins_end(o1);         break;
-        case "eqc"    : ins_eqc(o1,o2,o3);   break;
-        case "eqv"    : ins_eqv(o1,o2,o3);   break;
-        case "fun"    : ins_fun(o1, o2);     break;
-        case "gt"     : ins_gt(o1, o2, o3);  break;
-        case "gte"    : ins_gte(o1, o2, o3); break;
-        case "import" :                      break;
-        case "jump"   : ins_jump(o1);        break;
-        case "jumpv"  : ins_jumpv(o1, o2);   break;
-        case "label"  :                      break;
-        case "mul"    : ins_mul(o1, o2, o3); break;
-        case "neqc"   : ins_neqc(o1,o2,o3);  break;
-        case "neqv"   : ins_neqv(o1,o2,o3);  break;
-        case "not"    : ins_not(o1);         break;
-        case "or"     : ins_or(o1, o2, o3);  break;
-        case "print"  : ins_print(o1);       break;
-        case "printc" : ins_printc(o1);      break;
-        case "println": ins_println();       break;
-        case "prints" : ins_prints();        break;
-        case "quit"   : ins_quit();          break;
-        case "read"   : ins_read(o1, o2);    break;
-        case "ret"    : ins_ret();           break;
-        case "server" : ins_server(o1,o2);   break;
-        case "set"    : ins_set(o1, o2, o3); break;
-        case "st"     : ins_st(o1, o2, o3);  break;
-        case "ste"    : ins_ste(o1, o2, o3); break;
-        case "sub"    : ins_sub(o1, o2, o3); break;
-        case "write"  : ins_write(o1, o2);   break;
-        case "writev" : ins_writev(o1, o2);  break;
+        case "add"    : ins_add(o1, o2, o3);                         break;
+        case "and"    : ins_and(o1, o2, o3);                         break;
+        case "call"   : ins_call(o1);                                break;
+        case "@"      : ins_comment();                               break;
+        case "conv"   : ins_conv(o1, o2);                            break;
+        case "copy"   : ins_copy(o1, o2);                            break;
+        case "div"    : ins_div(o1, o2, o3);                         break;
+        case "end"    : ins_end(o1);                                 break;
+        case "eqc"    : ins_eqc(o1,o2,o3);                           break;
+        case "eqv"    : ins_eqv(o1,o2,o3);                           break;
+        case "fun"    : ins_fun(o1, o2);                             break;
+        case "gt"     : ins_gt(o1, o2, o3);                          break;
+        case "gte"    : ins_gte(o1, o2, o3);                         break;
+        case "import" :                                              break;
+        case "jump"   : ins_jump(o1);                                break;
+        case "jumpv"  : ins_jumpv(o1, o2);                           break;
+        case "label"  :                                              break;
+        case "list"   : ins_list(o1, doc(current_ln, firstInsIdx));  break;
+        case "mul"    : ins_mul(o1, o2, o3);                         break;
+        case "neqc"   : ins_neqc(o1,o2,o3);                          break;
+        case "neqv"   : ins_neqv(o1,o2,o3);                          break;
+        case "not"    : ins_not(o1);                                 break;
+        case "or"     : ins_or(o1, o2, o3);                          break;
+        case "print"  : ins_print(o1);                               break;
+        case "printc" : ins_printc(o1);                              break;
+        case "println": ins_println();                               break;
+        case "prints" : ins_prints();                                break;
+        case "quit"   : ins_quit();                                  break;
+        case "read"   : ins_read(o1, o2);                            break;
+        case "ret"    : ins_ret();                                   break;
+        case "server" : ins_server(o1,o2);                           break;
+        case "set"    : ins_set(o1, o2, o3);                         break;
+        case "st"     : ins_st(o1, o2, o3);                          break;
+        case "ste"    : ins_ste(o1, o2, o3);                         break;
+        case "sub"    : ins_sub(o1, o2, o3);                         break;
+        case "write"  : ins_write(o1, o2);                           break;
+        case "writev" : ins_writev(o1, o2);                          break;
         
         default: error.error("Unknown instruction: " + fi);
       }

@@ -1,0 +1,36 @@
+set str person1 Aarik;
+set str person2 Xander;
+set str person3 Lucas;
+set num number 299;
+set bool boolean 299;
+
+list new People;
+list appv People str person1;
+list appv People str person2;
+list appv People str person3;
+list appv People bool boolean;
+list appv People num number;
+list appc People bool true;
+list appc People num 30;
+
+println;
+list acc People 2 var;
+printc The person at index 2 is:;
+print var;
+println;
+
+list len People length;
+printc Length: ;
+print length;
+println;
+
+
+list show People;
+println;
+
+list del People 4;
+list del People 4;
+list del People 4;
+list del People 4;
+
+list show People;
