@@ -1,7 +1,7 @@
 sudo apt-get update
 sudo apt-get install nodejs
-npm install -g typescript
-npm install -g pkg
+sudo npm install -g typescript
+sudo npm install -g pkg
 cd util
 tsc
 cd ..
@@ -19,6 +19,7 @@ pkg -t node18-macos-x64 -o simasc  ../../compiler.js
 pkg -t node18-macos-x64 -o simas ../../program.js
 chmod +x ./simasc
 chmod +x ./simas
+cd ..
 cd linux
 pkg -t node18-linux-x64 -o simasc  ../../compiler.js
 pkg -t node18-linux-x64 -o simas ../../program.js
