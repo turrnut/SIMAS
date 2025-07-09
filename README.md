@@ -32,6 +32,9 @@ All occurences of `\n` will be replaced with a new line, and `\\` with `\`.
 If you're on a UNIX system(MacOS, Linux) and can't run the `simasc`, try running `chmod +x ./simasc`,
 same thing applies to `simas`
 
+> [!NOTE]
+> This is the original SIMASJS implementation of the language.<br>
+
 ## DOCUMENTATION 
 ### DATA TYPES 
 #### - bool : a boolean value.
@@ -128,6 +131,41 @@ same thing applies to `simas`
 * labels MUST be defined in a line prior to the line in which it is used
 * OPERAND 1: name of the label
 
+#### - list
+* list operations. lists are a special data structure that allows you to have multiple values in a single container.
+* OPERAND 1: type of operation
+* OPERAND 2: name of the list
+* All of the list operations:
+    * `list new`
+        * creates a new list
+    * `list appv`
+        * append a variable to a list
+        * OPERAND 3: data type of the variable
+        * OPERAND 4: name of the variable
+    * `list appc`
+        * append a constant to a list
+        * OPERAND 3: data type of the constant
+        * OPERNAD 4: the constant
+    * `list upv`
+        * update the list item at a specific index with a variable
+        * OPERAND 3: the index, starting from 1
+        * OPERAND 4: the data type of the variable
+        * OPERAND 4: name of the variable
+    * `list upc`
+        * update the list item at a specific index with a constant
+        * OPERAND 3: the index, starting from 1
+        * OPERAND 4: the data type of the constant
+        * OPERAND 4: the constant
+    * `list del`
+        * delete an item from the list
+        * OPERAND 3: the index of the item, starting from 1
+    * `list acc`
+        * access an item from a list and store it in a variable
+        * OPERAND 3: the index, starting from 1
+        * OPERAND 4: the name of the variable that you want to store the value in.
+    * `list show`
+        * print out the entire list to the standard output
+
 #### - mul
 * performs operation of OPERAND 2 multiply OPERAND 3 (as of now can only handle num) the value will be assigned to OPERAND 2, if it is a variable name
 * OPERAND 1: the data type of both OPERAND 2 and 3
@@ -186,7 +224,7 @@ same thing applies to `simas`
 * OPERAND 2: optional, but required if operand 1 is present. this operand specifies the return value. note: the return value will be stored in a variable called `$functionName`. For example, the return value for a function like `addThree` would be stored in a variable called `$addThree`.
 
 #### - server
-* make a server that hosts a static website
+* make a server that hosts a static website. This instruction is SIMASJS specific.
 * OPERAND 1: path to the directory containing static website files
 * OPERAND 2: port number
 
