@@ -9,6 +9,6 @@
 * [X] IO operations
 * [ ] string operations
 * [ ] math functions
-* [ ] arrays
+* [X] arrays
 * [ ] add a package manager
 * [ ] sockets & networking

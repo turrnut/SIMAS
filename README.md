@@ -2,7 +2,7 @@
 ![SIMAS BANNER](/images/simasbanner.png)
 # The SIMAS Programming Language
 *Created by: Turrnut*<br>
-**Current Version v2.0**<br>
+**Current Version v2**<br>
 ![License](https://img.shields.io/github/license/turrnut/SIMAS?style=for-the-badge)
 ![Code Size](https://img.shields.io/github/languages/code-size/turrnut/SIMAS?style=for-the-badge)<br>
 **SIMAS**, which is an acronym for **SIM**ple **AS**sembly, is a dynamically typed, compiled,
@@ -59,7 +59,7 @@ same thing applies to `simas`
 #### - call
 * call the function
 * OPERAND 1: the name of the function
-* OPERAND 2 and all even numbered operands beyond that: can only be either `v`, `c`, or `b` which specifies the mode of the argument. `v` is followed by a variable name, `c` is followed by a `str` or `num` constant, while `b` is followed by a `bool` constant.
+* OPERAND 2 and all even numbered operands beyond that: can only be either `v`, `c`, `l` or `b` which specifies the mode of the argument. `v` is followed by a variable name, `c` is followed by a `num` constant, `l` is followed by the name of a list, while `b` is followed by a `bool` constant.
 * OPERAND 3 and all odd numbered operands beyond that: value of the argument
 
 #### - conv
@@ -165,6 +165,12 @@ same thing applies to `simas`
         * OPERAND 4: the name of the variable that you want to store the value in.
     * `list show`
         * print out the entire list to the standard output
+    * `list dump`
+        * writes a list to a file
+        * OPERAND 3: file name
+    * `list load`
+        * loads a list from a file
+        * OPERAND 3: file name
 
 #### - mul
 * performs operation of OPERAND 2 multiply OPERAND 3 (as of now can only handle num) the value will be assigned to OPERAND 2, if it is a variable name
@@ -220,7 +226,7 @@ same thing applies to `simas`
 
 #### - ret
 * signal the end of the execution of function. **IT IS VERY IMPORTANT** to include this at the end of every function(before `end fun;`) because otherwise the function will be stuck in an infinite loop
-* OPERAND 1: optional, but should be used when the function has a return value. put `v` if OPERAND 2 is a variable name, `c` if it a `str` or `num` constant, and `b` if it is a `bool` constant
+* OPERAND 1: optional, but should be used when the function has a return value. put `v` if OPERAND 2 is a variable name, `c` if it a `str` or `num` constant, `l` if it is a list, and `b` if it is a `bool` constant
 * OPERAND 2: optional, but required if operand 1 is present. this operand specifies the return value. note: the return value will be stored in a variable called `$functionName`. For example, the return value for a function like `addThree` would be stored in a variable called `$addThree`.
 
 #### - server

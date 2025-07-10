@@ -125,20 +125,21 @@ function run(inputText, isRun, fileName, importedFiles, repl=false) {
       let mode = "v";
       let argList = [];
       for (let index = 0; index < (callFunction[1] * 2) + 1; index++) {
-        if (mode != "c" && mode != "v" && mode != "b") {
-          error.error(`Incorrect mode \"${mode}\", can only be \"c\", \"v\" or \"b\".`);
+        if (mode != "c" && mode != "v" && mode != "b" && mode != "l") {
+          error.error(`Incorrect mode \"${mode}\", can only be \"c\", \"v\", \"l\" or \"b\".`);
         }
 
         let currentThing = current_ln[firstInsIdx + 1 + index];
-        if (currentThing.toLowerCase() == "v" || currentThing.toLowerCase() == "c" || currentThing.toLowerCase() == "b" || (firstInsIdx + 1 + index) % 2 == 0) {
+        if (currentThing.toLowerCase() == "v" || currentThing.toLowerCase() == "c" || currentThing.toLowerCase() == "l" || currentThing.toLowerCase() == "b" || (firstInsIdx + 1 + index) % 2 == 0) {
           mode = currentThing.toLowerCase();
           continue;
         }
         
         if (mode == "v") {
           argList.push(boxes[currentThing]);
-        }
-        else if (mode == "b") {
+        } else if (mode == "l") {
+          argList.push(lists[currentThing]);
+        } else if (mode == "b") {
           if (currentThing == "true") argList.push(true);
           else if (currentThing == "false") argList.push(false);
           else error.error(`Argument "${currentThing}" is not a Boolean constant.`);
@@ -150,9 +151,12 @@ function run(inputText, isRun, fileName, importedFiles, repl=false) {
       for (let index = 0; index < argList.length; index++) {
         const argument = argList[index];
         let argIdx = String(index-1);
-        boxes["$" + argIdx] = argument;
         if ((!isNaN(Number(argument))) && argument !== true && argument !== false) {
           boxes["$" + argIdx] = Number(argument);
+        } else if (Array.isArray(argument)) {
+          lists["$" + argIdx] = argument;
+        } else {
+          boxes["$" + argIdx] = argument;
         }
       }
 
@@ -256,7 +260,7 @@ function run(inputText, isRun, fileName, importedFiles, repl=false) {
         boxes[op1] = String(boxes[op1]) !== String(op2);
       }
       else if (dataType.toLowerCase() == "bool") {
-          boxes[op1] = Boolean(boxes[op1]) !== Boolean(op2);
+          boxes[op1] = Boolean(boxes[op1]) !== (op2.toLowerCase() === "true" ? true : false);
       } else {
         error.error(`Illegal type \"${dataType}\" when performing NEQC.`);
       }
@@ -601,6 +605,27 @@ function run(inputText, isRun, fileName, importedFiles, repl=false) {
           show += "]";
           process.stdout.write(show);
           break;
+        case "dump":
+          // options 0 = list name
+          // options 1 = file name
+          let the_list_write = JSON.stringify(lists[options[0]]); 
+          try {
+            fs.writeFileSync(options[1], the_list_write, 'utf8');
+          } catch (err) {
+            error.error(`Error while dumping ${options[0]} to file ${options[1]}.`);
+          }
+          break;
+        case "load":
+          // options 0 = list name
+          // options 1 = file name
+          let the_list_read = options[1];
+          try {
+            const data = fs.readFileSync(the_list_read, 'utf8');
+            lists[options[0]] = JSON.parse(data);
+          } catch (err) {
+            error.error(`Error while loading from file ${options[1]}.`);
+          }
+          break;
         default:
           error.error(`Invalid list operation "${opType}".`);
       }
@@ -680,15 +705,25 @@ function run(inputText, isRun, fileName, importedFiles, repl=false) {
       
       switch (current_ln[firstInsIdx + 1].toLowerCase()) {
         case "c":
-          boxes[`$${current_function}`] = current_ln[firstInsIdx + 2];
           if ((!isNaN(Number(current_ln[firstInsIdx + 2])))) {
             boxes[`$${current_function}`] = Number(current_ln[firstInsIdx + 2]);
+          } else {
+            let retVal = "";
+            for (let ri = 2; ri+firstInsIdx < current_ln.length; ri++) {
+              const element = current_ln[ri + firstInsIdx];
+              retVal += element;
+              retVal += " ";
+            }
+            boxes[`$${current_function}`] = retVal;
           }
 
         break;
         case "v":
           boxes[`$${current_function}`] = boxes[current_ln[firstInsIdx + 2]];
 
+        case "l":
+          lists[`$${current_function}`] = lists[current_ln[firstInsIdx + 2]];
+        
         break;
         case "b":
           if (current_ln[firstInsIdx + 2] == "true") boxes[`$${current_function}`] = true;
@@ -713,6 +748,9 @@ function run(inputText, isRun, fileName, importedFiles, repl=false) {
         case "in": boxes[boxIdx] = readline.question(); break;
         case "num": boxes[boxIdx] = Number(newValue); break;
         case "bool":
+          if (newValue.toLowerCase() != "true" && newValue.toLowerCase() != "false")
+            error.error(`Illegal value ${newValue} while creating variable with type bool.`);
+          
           boxes[boxIdx] = newValue.toLowerCase() === "true" ? true : false;
           break;
         case "str":
