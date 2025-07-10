@@ -1,0 +1,10 @@
+list new Test;
+list appc Test str String;
+list appc Test num 123123;
+list appc Test bool false;
+
+@ .sad = Simple Assembly Data;
+list dump Test file.sad;
+
+list load Hello file.sad;
+list show Hello;
