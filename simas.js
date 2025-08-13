@@ -746,7 +746,7 @@ function run(inputText, isRun, fileName, importedFiles, repl=false) {
       switch(dataType.toLowerCase()) {
         default: error.error("Unknown Data Type \""+dataType+"\".");
         case "in": boxes[boxIdx] = readline.question(); break;
-        case "num": boxes[boxIdx] = Number(newValue); break;
+        case "num": boxes[boxIdx] = !isNaN(Number(newValue)) ? Number(newValue) : Number(boxes[newValue]); break;
         case "bool":
           if (newValue.toLowerCase() != "true" && newValue.toLowerCase() != "false")
             error.error(`Illegal value ${newValue} while creating variable with type bool.`);
@@ -804,6 +804,20 @@ function run(inputText, isRun, fileName, importedFiles, repl=false) {
         return;
       }
       error.error(`Illegal type \"${dataType}\" when performing SUB.`);
+    }
+
+    function ins_type(variable, variableTypeRes) {
+      switch(typeof boxes[variable]) {
+        case "string" : boxes[variableTypeRes] = "str" ;  break;
+        case "boolean": boxes[variableTypeRes] = "bool";  break;
+        case "number" : boxes[variableTypeRes] = "num" ;  break;
+        default:
+          if(Array.isArray(boxes[variable])) 
+            boxes[variableTypeRes] = "list";
+          else
+            boxes[variableTypeRes] = "undefined";
+        break;
+      }
     }
 
     // instruction WRITE
@@ -905,28 +919,36 @@ function run(inputText, isRun, fileName, importedFiles, repl=false) {
 
       switch (fi.toLowerCase()) {
         case "add"    : ins_add(o1, o2, o3);                         break;
+        case "+"      : ins_add(o1, o2, o3);                         break;
         case "and"    : ins_and(o1, o2, o3);                         break;
+        case "&&"     : ins_and(o1, o2, o3);                         break;
         case "call"   : ins_call(o1);                                break;
         case "@"      : ins_comment();                               break;
         case "conv"   : ins_conv(o1, o2);                            break;
         case "copy"   : ins_copy(o1, o2);                            break;
         case "div"    : ins_div(o1, o2, o3);                         break;
+        case "/"      : ins_div(o1, o2, o3);                         break;
         case "end"    : ins_end(o1);                                 break;
         case "eqc"    : ins_eqc(o1,o2,o3);                           break;
         case "eqv"    : ins_eqv(o1,o2,o3);                           break;
         case "fun"    : ins_fun(o1, o2);                             break;
         case "gt"     : ins_gt(o1, o2, o3);                          break;
+        case ">"      : ins_gt(o1, o2, o3);                          break;
         case "gte"    : ins_gte(o1, o2, o3);                         break;
+        case ">="     : ins_gte(o1, o2, o3);                         break;
         case "import" :                                              break;
         case "jump"   : ins_jump(o1);                                break;
         case "jumpv"  : ins_jumpv(o1, o2);                           break;
         case "label"  :                                              break;
         case "list"   : ins_list(o1, doc(current_ln, firstInsIdx));  break;
         case "mul"    : ins_mul(o1, o2, o3);                         break;
+        case "*"      : ins_mul(o1, o2, o3);                         break;
         case "neqc"   : ins_neqc(o1,o2,o3);                          break;
         case "neqv"   : ins_neqv(o1,o2,o3);                          break;
         case "not"    : ins_not(o1);                                 break;
+        case "!"      : ins_not(o1);                                 break;
         case "or"     : ins_or(o1, o2, o3);                          break;
+        case "||"     : ins_or(o1, o2, o3);                          break;
         case "print"  : ins_print(o1);                               break;
         case "printc" : ins_printc(o1);                              break;
         case "println": ins_println();                               break;
@@ -937,8 +959,12 @@ function run(inputText, isRun, fileName, importedFiles, repl=false) {
         case "server" : ins_server(o1,o2);                           break;
         case "set"    : ins_set(o1, o2, o3);                         break;
         case "st"     : ins_st(o1, o2, o3);                          break;
+        case "<"      : ins_st(o1, o2, o3);                          break;
         case "ste"    : ins_ste(o1, o2, o3);                         break;
+        case "<="     : ins_ste(o1, o2, o3);                         break;
         case "sub"    : ins_sub(o1, o2, o3);                         break;
+        case "-"      : ins_sub(o1, o2, o3);                         break;
+        case "type"   : ins_type(o1, o2);                            break;
         case "write"  : ins_write(o1, o2);                           break;
         case "writev" : ins_writev(o1, o2);                          break;
         
