@@ -12,7 +12,7 @@ Initially I wrote SIMAS as a simple toy language in the span of three days, but 
 SIMAS is a general purpose programming language, but is used more in web development. <br>
 
 > [!NOTE]
-> This is the original SIMASJS implementation of the language.<br>
+> This is the original SIMASJS implementation of the language. If you're interested, check out the [other implementations](https://github.com/turrnutorg/SIMAS) too!<br>
 
 ## Why SIMAS?
 - **Simplicity:** With a minimalistic and Assembly-like syntax, SIMAS allows you to write code with an instruction format that makes behavior predictable and transparent.
