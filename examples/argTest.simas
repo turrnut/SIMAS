@@ -3,9 +3,9 @@
 
 @ This function adds three numbers together and return it;
 FUN addThree 3;
-    PLEASE COPY $0 result;
-    ADD num result $1;
+    PLEASE COPY $1 result;
     ADD num result $2;
+    ADD num result $3;
 
     RET v result;
 END FUN;
@@ -15,7 +15,27 @@ SET NUM uwu 69420;
 
 @ v is variable, c is constant;
 @ the v mode specifies that the argument is a variable name;
-@ the c mode specifies that the argument is a str/bool constant;
+@ the c mode specifies that the argument is a num constant;
 @ the b mode specifies that the argument is a boolean constant;
 CALL addThree v asfd c 121 v uwu;
-PRINT $addThree;
+@ PRINT $addThree;
+
+label asdf;
+
+FUN listtest 1;
+    LIST APPC $1 bool true;
+    RET l $1;
+END FUN;
+
+LIST new myList;
+LIST APPC myList str Hello;
+PLEASE LIST SHOW myList;
+CaLL listtest l myList;
+PLEASE LIST SHOW myList;
+
+copyl myList newList;
+list show newList;
+list acc newList 2 aaa;
+print aaa;
+
+

@@ -2,7 +2,7 @@ set str person1 Aarik;
 set str person2 Xander;
 set str person3 Lucas;
 set num number 299;
-set bool boolean 299;
+set bool boolean false;
 
 list new People;
 list appv People str person1;

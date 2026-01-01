@@ -150,7 +150,7 @@ function run(inputText, isRun, fileName, importedFiles, repl=false) {
       }
       for (let index = 0; index < argList.length; index++) {
         const argument = argList[index];
-        let argIdx = String(index-1);
+        let argIdx = String(index);
         if ((!isNaN(Number(argument))) && argument !== true && argument !== false) {
           boxes["$" + argIdx] = Number(argument);
         } else if (Array.isArray(argument)) {
@@ -465,7 +465,7 @@ function run(inputText, isRun, fileName, importedFiles, repl=false) {
       // for index specific actions
       let list_in_question = [];
 
-      switch (opType) {
+      switch (opType.toLowerCase()) {
         case "new":
           // options 1 = list name
           let listname = options[0];
@@ -517,7 +517,7 @@ function run(inputText, isRun, fileName, importedFiles, repl=false) {
           
           list_in_question = lists[options[0]];
           if ((newidx <= 0) || (newidx > list_in_question.length) || (list_in_question[newidx-1] == undefined)) 
-            error.error(`Index out of bounds.`);
+            error.error(`Index out of bounds. `);
           
           newidx --;
 
@@ -583,8 +583,8 @@ function run(inputText, isRun, fileName, importedFiles, repl=false) {
           list_in_question = lists[options[0]];
 
           let idx = Number(options[1]);
-          if ((idx <= 0) || (idx >= list_in_question.length + 1) || (list_in_question[idx] == undefined)) 
-            error.error(`Index out of bounds.`);
+          if ((idx <= 0) || (idx > list_in_question.length) || (list_in_question[idx-1] == undefined)) 
+            error.error(`Index out of bounds. ${list_in_question.length}`);
 
           idx --;
 
@@ -687,6 +687,11 @@ function run(inputText, isRun, fileName, importedFiles, repl=false) {
     // instruction COPY
     function ins_copy (from, to) {
       boxes[to] = boxes[from];
+    }
+
+    // instruction COPYL
+    function ins_copyl (from, to) {
+      lists[to] = lists[from];
     }
     
     // instruction RET
@@ -926,6 +931,7 @@ function run(inputText, isRun, fileName, importedFiles, repl=false) {
         case "@"      : ins_comment();                               break;
         case "conv"   : ins_conv(o1, o2);                            break;
         case "copy"   : ins_copy(o1, o2);                            break;
+        case "copyl"  : ins_copyl(o1, o2);                           break;
         case "div"    : ins_div(o1, o2, o3);                         break;
         case "/"      : ins_div(o1, o2, o3);                         break;
         case "end"    : ins_end(o1);                                 break;

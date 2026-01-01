@@ -52,7 +52,7 @@ same thing applies to `simas`
 #### - call
 * call the function
 * OPERAND 1: the name of the function
-* OPERAND 2 and all even numbered operands beyond that: can only be either `v`, `c`, `l` or `b` which specifies the mode of the argument. `v` is followed by a variable name, `c` is followed by a `num` constant, `l` is followed by the name of a list, while `b` is followed by a `bool` constant.
+* OPERAND 2 and all even numbered operands beyond that: can only be either `v`, `c`, `l` or `b` which specifies the mode of the argument. `v` is followed by a variable name, `c` is followed by a `num` constant, `l` is followed by the name of a list, while `b` is followed by a `bool` constant. Also, lists pass by reference, while other pass by value.
 * OPERAND 3 and all odd numbered operands beyond that: value of the argument
 
 #### - conv
@@ -161,6 +161,9 @@ same thing applies to `simas`
         * OPERAND 4: the name of the variable that you want to store the value in.
     * `list show`
         * print out the entire list to the standard output
+    * `list len`
+        * get the length of a list
+        * OPERAND 3: the name of the variable to which the value of the length is assigned
     * `list dump`
         * writes a list to a file
         * OPERAND 3: file name
