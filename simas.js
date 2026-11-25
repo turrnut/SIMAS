@@ -5,6 +5,7 @@ const http = require("http");
 
 const error = require("./error");
 const common = require("./common");
+const web = require("./util/web");
 
 let boxes = [];
 let labels = [];
@@ -36,7 +37,7 @@ function run(inputText, isRun, fileName, importedFiles, repl=false) {
   let current_function = "";
   let lines = [];
   let implines = [];
-  let returnTo = 0;
+  let returnTo = [];
   
   // assigned in the dispatcher function
   let firstInsIdx;
@@ -163,7 +164,7 @@ function run(inputText, isRun, fileName, importedFiles, repl=false) {
         }
       }
 
-      returnTo = lnIdx;
+      returnTo.push(lnIdx);
       lnIdx = callFunction[2];
       inFunction = true;
       execFunction = true;
@@ -709,8 +710,8 @@ function run(inputText, isRun, fileName, importedFiles, repl=false) {
     function ins_ret() {
       inFunction = false;
       execFunction = false;
-      lnIdx = returnTo;
-      returnTo = 0;
+      lnIdx = returnTo[returnTo.length];
+      returnTo.pop();
       if(Number(current_ln.length - firstInsIdx) < 2){
         return;
       }
