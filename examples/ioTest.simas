@@ -1,0 +1,14 @@
+@ Testing file input and output;
+@@@@@@@@;
+@ reading files;
+read ..\\simas.js myVar;
+print myVar;
+
+SET str yourName Xandy;
+
+@@@@@@@@@;
+@ writing to files;
+write IO.TXT I DID IT\n\n;
+
+@ will override the above;
+writev IO.TXT yourName;

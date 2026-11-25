@@ -1,1 +1,4 @@
-*.exe
+/bin
+*.csa
+util/*.js
+/ignore

@@ -1,0 +1,15 @@
+@Loop 5000 times and print it out;
+
+SET NUM idx 0;
+
+LABEL doIt;
+
+PRINT idx;
+PRINTLN;
+
+ADD NUM idx 1;
+
+COPY idx cont;
+STE NUM cont 5000;
+
+JUMPV doIt cont;
