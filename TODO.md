@@ -13,3 +13,4 @@
 * [ ] add a package manager
 * [ ] sockets & networking
 * [ ] MVC FRAMEWORK!!!
+* [ ] macros

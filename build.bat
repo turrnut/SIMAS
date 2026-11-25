@@ -1,38 +1,39 @@
 @echo off
 
 REM Install global npm packages
-echo Installing TypeScript...
-call npm install -g typescript
+echo SIMAS:  Installing TypeScript...
+call npm install typescript
+call npm install --save-dev @types/node
 if %errorlevel% neq 0 (
-    echo Failed to install TypeScript
+    echo SIMAS:  Failed to install TypeScript
     exit /b %errorlevel%
 )
 
-echo Installing pkg...
+echo SIMAS:  Installing pkg...
 call npm install -g pkg
 if %errorlevel% neq 0 (
-    echo Failed to install pkg
+    echo SIMAS:  Failed to install pkg
     exit /b %errorlevel%
 )
 
 REM Change to the util directory and run TypeScript compiler
-echo Changing to util directory...
+echo SIMAS:  Changing to util directory...
 cd util
 if not %errorlevel%==0 (
-    echo Failed to change directory to util
+    echo SIMAS:  Failed to change directory to util
     exit /b %errorlevel%
 )
 
-echo Running TypeScript Compiler...
-call tsc
+echo SIMAS:  Running TypeScript Compiler...
+call node ../node_modules/typescript/lib/tsc.js
 if %errorlevel% neq 0 (
-    echo TypeScript compilation failed
+    echo SIMAS:  TypeScript compilation failed
     exit /b %errorlevel%
 )
 cd ..
 
 REM Create bin directory structure
-echo Creating directory structure...
+echo SIMAS:  Creating directory structure...
 mkdir bin
 cd bin
 mkdir windows
@@ -40,51 +41,51 @@ mkdir macos
 mkdir linux
 
 REM Build for Windows
-echo Building for Windows...
+echo SIMAS:  Building for Windows...
 cd windows
 call pkg -t node18-win-x64 -o simasc.exe ..\..\compiler.js
 if %errorlevel% neq 0 (
-    echo Failed to build simasc.exe for Windows
+    echo SIMAS:  Failed to build simasc.exe for Windows
     exit /b %errorlevel%
 )
 call pkg -t node18-win-x64 -o simas.exe ..\..\program.js
 if %errorlevel% neq 0 (
-    echo Failed to build simas.exe for Windows
+    echo SIMAS:  Failed to build simas.exe for Windows
     exit /b %errorlevel%
 )
 
 cd ..
 
 REM Build for macOS
-echo Building for macOS...
+echo SIMAS:  Building for macOS...
 cd macos
 call pkg -t node18-macos-x64 -o simasc ..\..\compiler.js
 if %errorlevel% neq 0 (
-    echo Failed to build simasc for macOS
+    echo SIMAS:  Failed to build simasc for macOS
     exit /b %errorlevel%
 )
 call pkg -t node18-macos-x64 -o simas ..\..\program.js
 if %errorlevel% neq 0 (
-    echo Failed to build simas for macOS
+    echo SIMAS:  Failed to build simas for macOS
     exit /b %errorlevel%
 )
 cd ..
 
 REM Build for Linux
-echo Building for Linux...
+echo SIMAS:  Building for Linux...
 cd linux
 call pkg -t node18-linux-x64 -o simasc ..\..\compiler.js
 if %errorlevel% neq 0 (
-    echo Failed to build simasc for Linux
+    echo SIMAS:  Failed to build simasc for Linux
     exit /b %errorlevel%
 )
 call pkg -t node18-linux-x64 -o simas ..\..\program.js
 if %errorlevel% neq 0 (
-    echo Failed to build simas for Linux
+    echo SIMAS:  Failed to build simas for Linux
     exit /b %errorlevel%
 )
 cd ..
 
 cd ..
 
-echo Script completed.
+echo SIMAS:  Script completed.

@@ -7,9 +7,11 @@
   "author": "Turrnut",
   "license": "ISC",
   "dependencies": {
-    "readline-sync": "^1.4.10"
+    "readline-sync": "^1.4.10",
+    "tsc": "^2.0.4",
+    "typescript": "^7.0.2"
   },
   "devDependencies": {
-    "@types/node": "^22.10.2"
+    "@types/node": "^22.20.7"
   }
 }

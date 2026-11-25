@@ -3,9 +3,9 @@ const path = require("path");
 const fs = require("fs");
 const http = require("http");
 
-const error = require("./error");
-const common = require("./common");
-const web = require("./util/web");
+const error = require("./error.js");
+const common = require("./common.js");
+const web = require("./util/web.js");
 
 let boxes = [];
 let labels = [];

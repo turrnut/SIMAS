@@ -1,6 +1,6 @@
 let fs = require('fs');
-let simas = require('./simas');
-let common = require('./common');
+let simas = require('./simas.js');
+let common = require('./common.js');
 
 // Compiled Simple Assembly
 const compiledFileExtension = ".csa";

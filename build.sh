@@ -1,6 +1,7 @@
 sudo apt-get update
 sudo apt-get install nodejs
 sudo npm install -g typescript
+sudo npm install --save-dev @types/node
 sudo npm install -g pkg
 cd util
 tsc

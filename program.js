@@ -1,8 +1,8 @@
 let fs = require('fs');
 let path = require("path");
-let simas = require('./simas');
-let common = require('./common');
-let tools = require("./util/tools");
+let simas = require('./simas.js');
+let common = require('./common.js');
+let tools = require("./util/tools.js");
 
 if(!process.argv[2]) {
     simas.run("", true, "<simas_shell>", [], repl=true);
