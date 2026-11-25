@@ -1,7 +1,7 @@
 // a file that is included in both compiler.js and program.js
 
-const version = "2.3";
-const year = "2025";
+const version = "2.4";
+const year = "2026";
 
 const copyright = `Copyright (c) ${year} Turrnut`;
 const compiler_information = "SIMAS Programming Language Compiler v" + version + `\n${copyright}\n\n` + "Usage: \n  simasc [path to file]\n    to compile a file\n\n  simasc -h\n    to display this message\n\n";
